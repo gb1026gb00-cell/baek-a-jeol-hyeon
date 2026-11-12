@@ -381,7 +381,6 @@ button{font:inherit;cursor:pointer}
 /* 최종 수정: 실사 사진 속 검정 휴대폰에만 HTML 카톡 화면을 얹음 */
 #phoneScreen {
   background:#9e7b69!important;
-  display:flex!important;
   align-items:center!important;
   justify-content:center!important;
   padding:0!important;
@@ -413,10 +412,10 @@ button{font:inherit;cursor:pointer}
 #phoneScreen .pov-finger {display:none!important;content:none!important}
 #phoneScreen .phone-stage>.phone {
   position:absolute!important;
-  left:39.85%!important;
-  top:12.75%!important;
-  width:19.55%!important;
-  height:70.55%!important;
+  left:39.55%!important;
+  top:13.05%!important;
+  width:19.9%!important;
+  height:65.5%!important;
   box-sizing:border-box!important;
   padding:0!important;
   margin:0!important;
@@ -498,6 +497,13 @@ button{font:inherit;cursor:pointer}
   #phoneScreen #sendReply {font-size:clamp(9px,1.2svh,13px)!important}
 }
 
+</style>
+<style>
+/* 비활성 화면은 절대 노출하지 않음: 이전 CSS !important 충돌 방지 */
+#phoneScreen:not(.active){display:none!important}
+#phoneScreen.active{display:flex!important}
+/* 휴대폰 화면이 손가락 위로 번지지 않도록 하단 영역 제한 */
+#phoneScreen .phone-stage>.phone{clip-path:inset(0 round 6% / 3%)}
 </style>
 </head>
 <body>
