@@ -995,6 +995,34 @@ button{font:inherit;cursor:pointer}
 .bridge-water-drop:before{content:"";position:absolute;left:1px;top:-5px;border-left:2px solid transparent;border-right:2px solid transparent;border-bottom:7px solid #8faaba}
 @keyframes bridgeDripFall{0%{transform:translateY(-7px) scale(.55);opacity:0}12%{opacity:.85}65%{opacity:.8}100%{transform:translateY(47px) scale(.8);opacity:0}}
 @media(prefers-reduced-motion:reduce){.bridge-water-drop{animation:none!important;display:none}}
+</style><style id="cafe-cake-receipt-css">
+/* Small cafe: strawberry shortcake and a printed thermal-paper story receipt */
+#locationOverlay .location-modal.cafe-cake-mode{background:transparent!important;border:0!important;box-shadow:none!important;width:min(94vw,610px);max-height:94svh;overflow-y:auto;padding:8px!important}
+.cafe-cake-mode>h2,.cafe-cake-mode>.sub{display:none!important}
+.cafe-cake-stage{display:flex;align-items:center;flex-direction:column;gap:7px;padding:9px 5px 0}
+.cafe-cake-trigger{width:min(78%,310px);border:0;background:transparent;cursor:pointer;padding:0;filter:drop-shadow(0 10px 9px #654c4c38);transition:transform .3s ease}
+.cafe-cake-trigger svg{display:block;width:100%;height:auto}
+.cafe-cake-trigger:hover{transform:translateY(-4px) rotate(-2deg)}
+.cafe-cake-trigger:focus-visible{outline:2px solid #7e6073;outline-offset:5px}
+.cafe-cake-hint{font:13px 'Gowun Batang',serif;color:#694f5b;background:#fff8f0d9;border:1px solid #d6bcb3;padding:7px 13px;margin:0}
+.cafe-cake-mode #workList{display:none!important}
+.cafe-cake-mode.cafe-receipt-open #workList.cafe-receipt-list{display:flex!important;animation:cafeReceiptPrint .95s ease-out both}
+@keyframes cafeReceiptPrint{from{opacity:.35;transform:translateY(-65px) scaleY(.15)}to{opacity:1;transform:translateY(0) scaleY(1)}}
+.cafe-receipt-list{position:relative;flex-direction:column;gap:0;width:min(90%,350px);margin:6px auto 12px;padding:27px 20px 38px;background:repeating-linear-gradient(180deg,#fffaf0 0 6px,#f9f5e9 7px 8px);color:#514c4a;box-shadow:2px 10px 22px #4b3d3d3d;clip-path:polygon(0 0,100% 0,100% 98.4%,97% 99.3%,94% 98.5%,91% 99.3%,88% 98.5%,85% 99.3%,82% 98.5%,79% 99.3%,76% 98.5%,73% 99.3%,70% 98.5%,67% 99.3%,64% 98.5%,61% 99.3%,58% 98.5%,55% 99.3%,52% 98.5%,49% 99.3%,46% 98.5%,43% 99.3%,40% 98.5%,37% 99.3%,34% 98.5%,31% 99.3%,28% 98.5%,25% 99.3%,22% 98.5%,19% 99.3%,16% 98.5%,13% 99.3%,10% 98.5%,7% 99.3%,4% 98.5%,1% 99.3%,0 98.4%)}
+.cafe-receipt-heading{text-align:center;font:700 21px 'Gowun Batang',serif;letter-spacing:.05em;color:#524b50}
+.cafe-receipt-heading small{display:block;font:11px Georgia,serif;letter-spacing:.17em;margin-top:6px}
+.cafe-receipt-separator{border:0;border-top:1px dashed #7f7976;width:100%;margin:14px 0}
+.cafe-receipt-meta{display:flex;justify-content:space-between;gap:8px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;color:#635b59}
+.cafe-receipt-entry{display:block;width:100%;border:0;border-bottom:1px dashed #b6aaa3;padding:15px 2px;background:transparent;text-align:left;cursor:pointer;color:#514b4c;font:12px ui-monospace,SFMono-Regular,Consolas,monospace}
+.cafe-receipt-entry:hover,.cafe-receipt-entry:focus-visible{background:#eadfd180;outline:1px dashed #b69b9c}
+.cafe-receipt-row{display:flex;justify-content:space-between;gap:8px;align-items:start;margin:3px 0}
+.cafe-receipt-row strong{font-weight:700;overflow-wrap:anywhere;text-align:right;max-width:69%}
+.cafe-receipt-entry .cafe-receipt-read{display:block;text-align:center;font:11px 'Gowun Batang',serif;margin-top:8px;color:#a16d7d}
+.cafe-receipt-footer{text-align:center;font:12px 'Gowun Batang',serif;color:#827074;padding-top:15px}
+#storyOverlay .story-modal.cafe-receipt-reader{background:#fffaf0;border:1px dashed #c1a9a1}
+#storyOverlay .cafe-receipt-reader h2,#storyOverlay .cafe-receipt-reader .sub{color:#69545c}
+@media(max-width:600px){.cafe-receipt-list{padding:23px 14px 34px;width:min(93%,350px)}}
+@media(prefers-reduced-motion:reduce){.cafe-cake-mode.cafe-receipt-open #workList.cafe-receipt-list{animation:none!important}}
 </style></head>
 <body>
 <div id="app">
@@ -1261,7 +1289,7 @@ function openDefaultLocation(loc){
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
  modal.classList.remove("fx-garden","fx-school","fx-cafe","fx-bridge","shop-music-mode","shop-open");
  if(["garden","school","cafe","bridge"].includes(loc.id))modal.classList.add("fx-"+loc.id);
- modal.querySelector(".fx-scene")?.remove();modal.querySelector(".shop-music-stage")?.remove();modal.querySelector(".shop-music-player")?.remove();list.className="work-list";list.innerHTML="";list.style.display="grid";
+ modal.querySelector(".fx-scene")?.remove();modal.querySelector(".shop-music-stage")?.remove();modal.querySelector(".cafe-cake-stage")?.remove();modal.querySelector(".shop-music-player")?.remove();list.className="work-list";list.innerHTML="";list.style.display="grid";
  if(loc.id==="garden"||loc.id==="school"||loc.id==="bridge"){
    const scene=document.createElement("div");scene.className="fx-scene";
    if(loc.id==="garden"){
@@ -1294,7 +1322,7 @@ function openDefaultLocation(loc){
 function openSchoolDiary(loc){
  currentLocation=loc;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
- modal.classList.remove("garden-camera-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","fx-garden","fx-school","fx-cafe","fx-bridge");
+ modal.classList.remove("garden-camera-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","cafe-cake-mode","cafe-receipt-open","fx-garden","fx-school","fx-cafe","fx-bridge");
  modal.classList.add("school-diary-mode");
  modal.querySelector(".garden-camera-stage")?.remove();
  modal.querySelector(".bridge-boat-stage")?.remove();modal.querySelector(".shop-music-stage")?.remove();
@@ -1345,7 +1373,7 @@ function openSchoolDiary(loc){
 function openBridgeBoat(loc){
  currentLocation=loc;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
- modal.classList.remove("garden-camera-mode","school-diary-mode","fx-garden","fx-school","fx-cafe","fx-bridge","bridge-open");
+ modal.classList.remove("garden-camera-mode","school-diary-mode","cafe-cake-mode","cafe-receipt-open","fx-garden","fx-school","fx-cafe","fx-bridge","bridge-open");
  modal.classList.add("bridge-boat-mode");
  modal.querySelector(".garden-camera-stage")?.remove();
  modal.querySelector(".school-diary-stage")?.remove();
@@ -1454,13 +1482,61 @@ function openShopMusic(loc){
  $("#locationOverlay").classList.add("show");
 }
 
+
+function openCafeCake(loc){
+ currentLocation=loc;
+ const modal=$("#locationOverlay .location-modal"),list=$("#workList");
+ modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","fx-garden","fx-school","fx-cafe","fx-bridge","cafe-receipt-open");
+ modal.classList.add("cafe-cake-mode");
+ ["garden-camera-stage","school-diary-stage","bridge-boat-stage","shop-music-stage","shop-music-player","fx-scene","cafe-cake-stage"].forEach(c=>modal.querySelector("."+c)?.remove());
+ list.className="work-list cafe-receipt-list";list.innerHTML="";list.style.display="";
+ $("#locationTitle").textContent=loc.name;
+ const stage=document.createElement("div");stage.className="cafe-cake-stage";
+ stage.innerHTML=`<button class="cafe-cake-trigger" type="button" aria-label="딸기 생크림 케이크를 눌러 영수증 꺼내기"><svg viewBox="0 0 340 265" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+ <ellipse cx="171" cy="233" rx="146" ry="21" fill="#c8b8b0" opacity=".45"/>
+ <ellipse cx="171" cy="217" rx="147" ry="28" fill="#f3ece8" stroke="#b8a7a4" stroke-width="3"/>
+ <ellipse cx="171" cy="209" rx="128" ry="18" fill="#e7dcd7"/>
+ <path d="M67 122L247 100L287 168L157 215L67 182Z" fill="#f8f1e8" stroke="#bcaca5" stroke-width="2.4"/>
+ <path d="M67 122L247 100L287 168L157 189Z" fill="#fdf9f0" stroke="#cdbdb3" stroke-width="2"/>
+ <path d="M67 145L265 130L274 145L153 202L67 166Z" fill="#d95c68" opacity=".68"/>
+ <path d="M67 164L274 145L283 161L156 212L67 180Z" fill="#fff9f1"/>
+ <path d="M67 122Q77 110 94 118Q110 104 127 113Q142 98 158 109Q176 95 191 106Q212 91 228 102Q246 95 254 112L287 168Q275 161 264 173Q249 169 240 183Q226 180 214 192Q200 188 188 204Q171 201 157 215L67 182Z" fill="none" stroke="#fffaf4" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/>
+ <path d="M67 122L247 100L287 168L157 189Z" fill="#f9f5ec" opacity=".55"/>
+ <path d="M85 116Q93 99 109 112Q117 91 136 104Q147 85 164 101Q180 84 194 99Q209 82 225 100Q242 86 252 107" fill="none" stroke="#fffdf6" stroke-width="17" stroke-linecap="round"/>
+ <g fill="#c94757" stroke="#a63b4b" stroke-width="2"><path d="M100 92Q86 79 95 62Q111 51 123 68Q130 84 113 98Z"/><path d="M166 80Q151 67 161 49Q177 40 188 56Q196 74 179 84Z"/><path d="M228 91Q212 78 223 61Q238 52 251 68Q255 84 240 96Z"/></g>
+ <g fill="#69836a"><path d="M105 65L96 55L111 60L119 52L116 67Z"/><path d="M171 52L161 42L176 46L184 39L181 55Z"/><path d="M233 64L225 53L239 58L248 51L244 67Z"/></g>
+ <g fill="#f9c7bd" opacity=".85"><circle cx="103" cy="76" r="3"/><circle cx="170" cy="63" r="3"/><circle cx="231" cy="75" r="3"/></g>
+ <path d="M70 123L156 190L156 214L68 182Z" fill="#f8f1e8" opacity=".72"/>
+ </svg></button><p class="cafe-cake-hint">🍓 딸기 케이크를 누르면 영수증이 나옵니다</p>`;
+ modal.insertBefore(stage,list);
+ const heading=document.createElement("div");heading.className="cafe-receipt-heading";
+ heading.innerHTML="작은 카페<small>STRAWBERRY CAKE & STORIES</small>";list.append(heading);
+ const sep=document.createElement("hr");sep.className="cafe-receipt-separator";list.append(sep);
+ const meta=document.createElement("div");meta.className="cafe-receipt-meta";meta.innerHTML="<span>영수증 NO. 0001</span><span>발행일 : --.--.--</span>";list.append(meta);
+ const sep2=document.createElement("hr");sep2.className="cafe-receipt-separator";list.append(sep2);
+ STORIES.filter(st=>st.location==="cafe").forEach((st,i)=>{
+  const b=document.createElement("button");b.type="button";b.className="cafe-receipt-entry";
+  const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  b.innerHTML=`<span class="cafe-receipt-row"><span>상품번호</span><strong>${String(i+1).padStart(2,"0")}</strong></span>
+  <span class="cafe-receipt-row"><span>상품명</span><strong>${esc(st.title)}</strong></span>
+  <span class="cafe-receipt-row"><span>작성자</span><strong>${esc(st.author||"작가명 미정")}</strong></span>
+  <span class="cafe-receipt-row"><span>발행일</span><strong>${esc(st.date||"날짜 미정")}</strong></span>
+  <span class="cafe-receipt-read">${read.has(st.id)?"✓ 읽은 이야기 · 다시 보기":"♡ 영수증을 눌러 이야기 읽기"}</span>`;
+  b.onclick=()=>openStory(st);list.append(b);
+ });
+ const foot=document.createElement("div");foot.className="cafe-receipt-footer";foot.textContent="오늘도 달콤한 이야기를 주문해 주셔서 감사합니다.";list.append(foot);
+ stage.querySelector(".cafe-cake-trigger").onclick=()=>modal.classList.add("cafe-receipt-open");
+ $("#locationOverlay").classList.add("show");
+}
+
 function openLocation(loc){
  if(loc.id==="school")return openSchoolDiary(loc);
  if(loc.id==="bridge")return openBridgeBoat(loc);
  if(loc.id==="shop")return openShopMusic(loc);
+ if(loc.id==="cafe")return openCafeCake(loc);
  if(loc.id!=="garden"){
   const modal=$("#locationOverlay .location-modal"),list=$("#workList");
-  modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open");
+  modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","cafe-cake-mode","cafe-receipt-open");
   modal.querySelector(".garden-camera-stage")?.remove();modal.querySelector(".school-diary-stage")?.remove();modal.querySelector(".bridge-boat-stage")?.remove();
   modal.querySelector(".shop-music-stage")?.remove();modal.querySelector(".shop-music-player")?.remove();list.className="work-list";list.style.display="";
   return openDefaultLocation(loc);
@@ -1468,7 +1544,7 @@ function openLocation(loc){
  currentLocation=loc;$("#locationTitle").textContent=loc.name;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
  modal.classList.remove("fx-garden","fx-school","fx-cafe","fx-bridge");
- modal.classList.remove("school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open");modal.querySelector(".school-diary-stage")?.remove();modal.querySelector(".bridge-boat-stage")?.remove();
+ modal.classList.remove("school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","cafe-cake-mode","cafe-receipt-open");modal.querySelector(".school-diary-stage")?.remove();modal.querySelector(".bridge-boat-stage")?.remove();
  modal.classList.add("garden-camera-mode");
  modal.querySelector(".fx-scene")?.remove();modal.querySelector(".garden-camera-stage")?.remove();
  modal.querySelector(".shop-music-player")?.remove();list.className="work-list";list.innerHTML="";list.style.display="";
@@ -1495,6 +1571,7 @@ function openStory(st){
   if(st.location==="shop")stopShopMusic();
   const gardenReader=st.location==="garden";
   document.querySelector("#storyOverlay .story-modal").classList.toggle("shop-score-reader",st.location==="shop");
+  document.querySelector("#storyOverlay .story-modal").classList.toggle("cafe-receipt-reader",st.location==="cafe");
   document.querySelector("#storyOverlay .story-modal").classList.toggle("bridge-paper-reader",st.location==="bridge");
   document.querySelector("#storyOverlay .story-modal").classList.toggle("garden-photo-reader",gardenReader);
   document.querySelector("#storyOverlay .story-modal").classList.toggle("school-diary-reader",st.location==="school");
