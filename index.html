@@ -1149,7 +1149,7 @@ function visitLocationWithCats(loc){
   if(token!==mapCatState.token)return;
   const arrived=mapCatState.cats.every(c=>Math.hypot(c.tx-c.x,c.ty-c.y)<.25);
   if(arrived||performance.now()-start>5000){
-   openLocation(loc);
+   setTimeout(()=>{if(token===mapCatState.token)openLocation(loc);},900);
    scheduleCatWander();
   }else requestAnimationFrame(wait);
  }
