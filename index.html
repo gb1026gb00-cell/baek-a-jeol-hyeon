@@ -901,6 +901,39 @@ button{font:inherit;cursor:pointer}
  #credits .album-ending>p:nth-last-of-type(2),
  #credits .album-ending>p:last-of-type{font-size:9px!important;margin-top:5px!important}
 }
+</style><style id="bridge-origami-css">
+/* Bridge: weathered origami boat, transparent SVG, original ripples retained */
+#locationOverlay .location-modal.bridge-boat-mode{background:transparent!important;border:0!important;box-shadow:none!important;width:min(94vw,650px);max-height:93svh;overflow-y:auto;padding:8px!important}
+.bridge-boat-mode::after{display:none!important}
+.bridge-boat-mode>h2,.bridge-boat-mode>.sub{display:none!important}
+.bridge-boat-stage{position:relative;min-height:285px;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px 10px 8px;isolation:isolate}
+.bridge-boat-water{position:absolute;left:8%;right:8%;bottom:18px;height:130px;border-radius:50%;background:radial-gradient(ellipse at center,#6d879328,#6d87930d 46%,transparent 73%);pointer-events:none}
+.bridge-boat-water .fx-ripple{left:50%;top:48%;width:110px;height:40px;border-color:#718c9d70;transform:translate(-50%,-50%);animation:bridgeWaterRipple 3.2s ease-out infinite}
+.bridge-boat-water .fx-ripple:nth-child(2){animation-delay:1.05s}.bridge-boat-water .fx-ripple:nth-child(3){animation-delay:2.1s}
+@keyframes bridgeWaterRipple{0%{width:35px;height:13px;opacity:.8}100%{width:260px;height:90px;opacity:0}}
+.bridge-boat-trigger{position:relative;z-index:2;width:min(75%,310px);background:transparent;border:0;padding:0;cursor:pointer;animation:bridgeBoatFloat 3s ease-in-out infinite;filter:drop-shadow(0 7px 3px #3c4d5b33)}
+.bridge-boat-trigger svg{width:100%;display:block}
+.bridge-boat-trigger:focus-visible{outline:2px solid #52687d;outline-offset:7px}
+@keyframes bridgeBoatFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(1.5deg)}}
+.bridge-boat-hint{font:14px 'Gowun Batang',serif;color:#475a70;background:#f3eee5ed;padding:7px 15px;border:1px solid #c3b9a8;margin-top:10px;z-index:2}
+.bridge-boat-mode.bridge-open .bridge-boat-trigger{animation:bridgeBoatUnfold .85s ease-in forwards;pointer-events:none}
+@keyframes bridgeBoatUnfold{0%{transform:scale(1) rotate(-2deg);opacity:1}50%{transform:scale(1.08,.75) rotate(0);opacity:1}100%{transform:scale(1.2,.25);opacity:0}}
+.bridge-boat-mode.bridge-open .bridge-boat-hint{opacity:0;transition:opacity .25s}
+.bridge-boat-mode #workList{display:none!important}
+.bridge-boat-mode.bridge-open #workList.bridge-paper-list{display:flex!important;animation:bridgePaperOpen .85s ease-out both}
+@keyframes bridgePaperOpen{from{opacity:0;transform:perspective(500px) rotateX(62deg) scaleY(.35)}to{opacity:1;transform:perspective(500px) rotateX(0) scaleY(1)}}
+.bridge-boat-mode #workList.bridge-paper-list{position:relative;z-index:3;flex-direction:column;gap:10px;margin:-28px auto 8px;width:min(94%,540px);padding:30px 22px 32px;background:linear-gradient(130deg,#8697a51a 0%,transparent 27%,#b0bbc41c 70%,#8b9cab25 100%),repeating-linear-gradient(0deg,transparent 0 35px,#7d8d9b18 36px 37px),#eee6d9;border:1px solid #b7afa3;box-shadow:3px 8px 15px #28374726;clip-path:polygon(1% 1%,18% 0%,40% 1.2%,63% 0%,82% 1%,99% 0%,100% 22%,99% 57%,100% 83%,98% 100%,75% 99%,52% 100%,27% 99%,0% 100%,1% 76%,0% 50%);transform-origin:50% 0}
+.bridge-paper-list:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(87deg,transparent 32%,#65768b20 33%,transparent 34%,transparent 66%,#65768b20 67%,transparent 68%),linear-gradient(180deg,transparent 47%,#5e71861c 49%,transparent 51%)}
+.bridge-paper-heading{position:relative;text-align:center;font:22px 'Gowun Batang',serif;color:#34445c;margin:0 0 8px;padding:0 0 9px;border-bottom:1px solid #8294a277}
+.bridge-paper-heading small{display:block;font:10px Georgia,serif;letter-spacing:.18em;margin-top:6px;color:#718195}
+.bridge-paper-list .work-choice{position:relative;background:#f8f3e9b8;border:1px solid #c6bdb1;color:#3f4d61;text-align:left}
+.bridge-paper-list .work-choice:hover{background:#fffaf0}
+.bridge-paper-list .work-choice small,.bridge-paper-list .work-choice .status{color:#728093}
+#storyOverlay .story-modal.bridge-paper-reader{background:linear-gradient(110deg,#8295a518,transparent 35%,#9fadb41b 82%),repeating-linear-gradient(to bottom,transparent 0 36px,#8e9ead26 37px 38px),#eee7da;border:1px solid #b8afa2;box-shadow:4px 9px 24px #28374733}
+#storyOverlay .bridge-paper-reader h2,#storyOverlay .bridge-paper-reader .sub{color:#34465c}
+#storyOverlay .bridge-paper-reader .story-copy{color:#3f4a58}
+@media(max-width:600px){.bridge-boat-stage{min-height:225px}.bridge-boat-trigger{width:min(78%,255px)}.bridge-boat-mode #workList.bridge-paper-list{padding:24px 14px}.bridge-paper-heading{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.bridge-boat-trigger,.bridge-boat-mode.bridge-open .bridge-boat-trigger,.bridge-boat-mode.bridge-open #workList.bridge-paper-list{animation-duration:.01ms!important}}
 </style></head>
 <body>
 <div id="app">
@@ -1200,9 +1233,10 @@ function openDefaultLocation(loc){
 function openSchoolDiary(loc){
  currentLocation=loc;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
- modal.classList.remove("garden-camera-mode","fx-garden","fx-school","fx-cafe","fx-bridge");
+ modal.classList.remove("garden-camera-mode","bridge-boat-mode","bridge-open","fx-garden","fx-school","fx-cafe","fx-bridge");
  modal.classList.add("school-diary-mode");
  modal.querySelector(".garden-camera-stage")?.remove();
+ modal.querySelector(".bridge-boat-stage")?.remove();
  modal.querySelector(".fx-scene")?.remove();
  modal.querySelector(".school-diary-stage")?.remove();
  list.innerHTML="";
@@ -1246,19 +1280,65 @@ function openSchoolDiary(loc){
  stage.append(cover);modal.insertBefore(stage,list);
  $("#locationOverlay").classList.add("show");
 }
+
+function openBridgeBoat(loc){
+ currentLocation=loc;
+ const modal=$("#locationOverlay .location-modal"),list=$("#workList");
+ modal.classList.remove("garden-camera-mode","school-diary-mode","fx-garden","fx-school","fx-cafe","fx-bridge","bridge-open");
+ modal.classList.add("bridge-boat-mode");
+ modal.querySelector(".garden-camera-stage")?.remove();
+ modal.querySelector(".school-diary-stage")?.remove();
+ modal.querySelector(".fx-scene")?.remove();
+ modal.querySelector(".bridge-boat-stage")?.remove();
+ $("#locationTitle").textContent=loc.name;
+ list.innerHTML="";list.className="work-list bridge-paper-list";list.style.display="";
+ const stage=document.createElement("div");stage.className="bridge-boat-stage";
+ stage.innerHTML=`<div class="bridge-boat-water" aria-hidden="true"><span class="fx-ripple"></span><span class="fx-ripple"></span><span class="fx-ripple"></span></div>
+ <button class="bridge-boat-trigger" type="button" aria-label="물 위의 종이 돛단배 펼치기">
+ <svg viewBox="0 0 340 230" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+ <defs><linearGradient id="bridgePaperShade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f3ebdc"/><stop offset=".55" stop-color="#ded4c5"/><stop offset="1" stop-color="#b9b9b4"/></linearGradient></defs>
+ <path d="M22 109L101 131 168 37 238 129 320 102 283 182 68 181Z" fill="url(#bridgePaperShade)" stroke="#677487" stroke-width="2.2" stroke-linejoin="round"/>
+ <path d="M101 131L168 37 238 129 170 157Z" fill="#e5dfd5" stroke="#82909c" stroke-width="1.5"/>
+ <path d="M168 37L170 157 238 129Z" fill="#c5cbd0" opacity=".72"/>
+ <path d="M22 109L170 157 320 102 283 182 68 181Z" fill="#d8cbb9" stroke="#687889" stroke-width="2.2" stroke-linejoin="round"/>
+ <path d="M22 109L170 157 68 181Z" fill="#ede4d5" opacity=".85"/>
+ <path d="M320 102L170 157 283 182Z" fill="#bdc4c6" opacity=".72"/>
+ <path d="M68 181L170 157 283 182M101 131L170 157 238 129M168 37L168 155" fill="none" stroke="#77889a" stroke-width="1.5" opacity=".75"/>
+ <path d="M65 142Q101 124 134 147M213 155Q249 134 277 146" stroke="#758a99" stroke-width="7" opacity=".11" fill="none"/>
+ <path d="M120 113q12 8 25 2m72 25q11 8 23 2M98 164q20-5 37 1" stroke="#8b958e" stroke-width="2" opacity=".35" fill="none"/>
+ <path d="M84 167q16 8 32 3m120-4q12 5 24-1" stroke="#6c8194" stroke-width="2" opacity=".4" fill="none"/>
+ </svg></button><p class="bridge-boat-hint">물 위에 띄운 종이배를 펼쳐 보세요</p>`;
+ modal.insertBefore(stage,list);
+ const heading=document.createElement("div");heading.className="bridge-paper-heading";
+ heading.innerHTML="강가의 다리<small>LETTERS CARRIED BY WATER</small>";
+ list.append(heading);
+ STORIES.filter(st=>st.location==="bridge").forEach(st=>{
+  const b=document.createElement("button");b.type="button";b.className="work-choice";
+  b.innerHTML=`<span><small>STORY ${String(st.id).padStart(2,"0")}</small><strong>${st.title}</strong></span><span class="status">${read.has(st.id)?"읽음 ✓":"읽어보기　›"}</span>`;
+  b.onclick=()=>openStory(st);list.append(b);
+ });
+ stage.querySelector(".bridge-boat-trigger").onclick=()=>{
+  if(modal.classList.contains("bridge-open"))return;
+  modal.classList.add("bridge-open");
+  setTimeout(()=>{stage.style.display="none";},850);
+ };
+ $("#locationOverlay").classList.add("show");
+}
+
 function openLocation(loc){
  if(loc.id==="school")return openSchoolDiary(loc);
+ if(loc.id==="bridge")return openBridgeBoat(loc);
  if(loc.id!=="garden"){
   const modal=$("#locationOverlay .location-modal"),list=$("#workList");
-  modal.classList.remove("garden-camera-mode","school-diary-mode");
-  modal.querySelector(".garden-camera-stage")?.remove();modal.querySelector(".school-diary-stage")?.remove();
+  modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open");
+  modal.querySelector(".garden-camera-stage")?.remove();modal.querySelector(".school-diary-stage")?.remove();modal.querySelector(".bridge-boat-stage")?.remove();
   list.classList.remove("revealed");list.style.display="";
   return openDefaultLocation(loc);
  }
  currentLocation=loc;$("#locationTitle").textContent=loc.name;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
  modal.classList.remove("fx-garden","fx-school","fx-cafe","fx-bridge");
- modal.classList.remove("school-diary-mode");modal.querySelector(".school-diary-stage")?.remove();
+ modal.classList.remove("school-diary-mode","bridge-boat-mode","bridge-open");modal.querySelector(".school-diary-stage")?.remove();modal.querySelector(".bridge-boat-stage")?.remove();
  modal.classList.add("garden-camera-mode");
  modal.querySelector(".fx-scene")?.remove();modal.querySelector(".garden-camera-stage")?.remove();
  list.innerHTML="";list.classList.remove("revealed");list.style.display="";
@@ -1283,6 +1363,7 @@ function openLocation(loc){
 function openStory(st){
   currentStory=st;
   const gardenReader=st.location==="garden";
+  document.querySelector("#storyOverlay .story-modal").classList.toggle("bridge-paper-reader",st.location==="bridge");
   document.querySelector("#storyOverlay .story-modal").classList.toggle("garden-photo-reader",gardenReader);
   document.querySelector("#storyOverlay .story-modal").classList.toggle("school-diary-reader",st.location==="school");
   $("#gardenStoryOrnament").style.display=gardenReader?"flex":"none";
