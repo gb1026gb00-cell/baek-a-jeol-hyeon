@@ -856,7 +856,24 @@ button{font:inherit;cursor:pointer}
 .school-diary-mode .school-diary-page .school-diary-cat{font-size:15px!important}
 @media(max-width:480px){.school-diary-cover{width:min(310px,75vw)!important}}
 </style>
-</head>
+<style id="map-cat-walk-css">
+/* Two map companions: independent per visitor, animated travel between pins */
+#mapScreen .map-shell{position:relative}
+#mapCats{position:absolute;inset:0;pointer-events:none;z-index:9;overflow:hidden}
+.map-cat{position:absolute;width:clamp(25px,5.1%,43px);height:auto;left:0;top:0;transform:translate(-50%,-65%);will-change:left,top}
+.map-cat svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 2px 2px #221b1666)}
+.map-cat .cat-feet{transform-origin:50% 55%}
+.map-cat.walking .cat-feet{animation:catPaws .19s ease-in-out infinite alternate}
+.map-cat.walking svg{animation:catBounce .24s ease-in-out infinite alternate}
+.map-cat .cat-tail{transform-origin:75% 65%;animation:catTail 1.25s ease-in-out infinite alternate}
+.map-cat.facing-left svg{transform:scaleX(-1)}
+.map-cat.resting svg{animation:catRest 2.4s ease-in-out infinite}
+@keyframes catPaws{from{transform:rotate(-9deg)}to{transform:rotate(9deg)}}
+@keyframes catBounce{from{translate:0 0}to{translate:0 -2px}}
+@keyframes catTail{from{transform:rotate(-10deg)}to{transform:rotate(12deg)}}
+@keyframes catRest{50%{translate:0 -1px}}
+@media(prefers-reduced-motion:reduce){.map-cat svg,.map-cat .cat-feet,.map-cat .cat-tail{animation:none!important}}
+</style></head>
 <body>
 <div id="app">
   <section id="introScreen" class="screen video-screen active">
@@ -870,7 +887,7 @@ button{font:inherit;cursor:pointer}
     <div class="map-shell">
       <img class="map-image" src="assets/9b17f2b7b336.webp" alt="벚꽃 마을 지도">
       <div class="map-heading">A LITTLE JOURNEY IN THE ALBUM</div>
-      <div id="pins"></div>
+      <div id="pins"></div><div id="mapCats" aria-hidden="true"></div>
       <div id="progress">읽은 이야기 0 / 15</div>
       <button class="inventory-toggle" id="openInventory" aria-label="수집한 아이템 보관함 열기">🗝 <span id="inventoryCount">0 / 15</span></button>
       <div class="map-vignette"></div>
@@ -1026,7 +1043,7 @@ $("#startButton").addEventListener("click",()=>{
   $("#startButton").classList.remove("show");
   playVideo($("#subVideo"),"assets/8828e9172bce.mp4",()=>enterMap());
 });
-function enterMap(){show("mapScreen");renderMap();}
+function enterMap(){show("mapScreen");renderMap();startMapCats();}
 function renderMap(){
   $("#pins").innerHTML="";
   LOCATIONS.forEach(loc=>{
@@ -1036,7 +1053,7 @@ function renderMap(){
     b.className="pin"+(complete?" done":"");
     b.style.left=loc.x+"%";b.style.top=loc.y+"%";
     b.innerHTML=`<span class="pin-shape"><span class="pin-number">${complete?"✓":"✦"}</span></span><span class="pin-label">${loc.name}</span>`;
-    b.addEventListener("click",()=>openLocation(loc));
+    b.addEventListener("click",()=>visitLocationWithCats(loc));
     $("#pins").appendChild(b);
   });
   $("#progress").textContent=`읽은 연성 ${read.size} / ${STORIES.length}`;
@@ -1044,6 +1061,71 @@ function renderMap(){
   $("#inventoryItems").innerHTML=STORIES.map(st=>`<div class="collection-item ${read.has(st.id)?"":"empty"}" title="${st.title}"><span>${read.has(st.id)?st.item:"♧"}</span><small>${String(st.id).padStart(2,"0")}</small></div>`).join("");
   $("#unlockFromCollection").style.display=read.size===STORIES.length?"inline-block":"none";
   $("#collectionHint").textContent=read.size===STORIES.length?"모든 추억을 모았어요. 마지막 앨범을 열어보세요.":`수집한 추억 ${read.size} / ${STORIES.length} · 작품을 읽으면 이곳에 모여요.`;
+}
+
+
+/* Cats keep their actual current positions; no teleport on destination changes. */
+const mapCatState={cats:[],frame:0,token:0,wanderingTimer:0,initialized:false};
+function makeMapCat(color,x,y){
+ const el=document.createElement("div");
+ el.className="map-cat resting";
+ el.innerHTML='<svg viewBox="0 0 80 66" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g class="cat-tail"><path d="M61 39 Q80 38 73 14" stroke="'+color+'" stroke-width="9" stroke-linecap="round" fill="none"/></g><g class="cat-feet"><path d="M21 45V58M38 45V58M51 44V58" stroke="'+color+'" stroke-width="9" stroke-linecap="round"/></g><ellipse cx="43" cy="38" rx="24" ry="17" fill="'+color+'"/><path d="M8 22L10 3L23 14L35 3L38 23Q39 43 23 45Q5 45 8 22Z" fill="'+color+'"/><path d="M13 26q4 4 8 0m6 0q4 4 8 0" stroke="#f7f0e7" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M21 33l2 2 2-2" stroke="#f7f0e7" stroke-width="1.5" fill="none"/></svg>';
+ $("#mapCats").append(el);
+ const cat={el,x,y,tx:x,ty:y,speed:0.22,delay:0};
+ drawMapCat(cat);return cat;
+}
+function drawMapCat(c){c.el.style.left=c.x+"%";c.el.style.top=c.y+"%";}
+function startMapCats(){
+ if(mapCatState.initialized)return;
+ mapCatState.initialized=true;
+ mapCatState.cats=[makeMapCat("#25252c",84,89),makeMapCat("#e4a447",90,91)];
+ let last=0;
+ function frame(now){
+  const dt=Math.min(45,now-(last||now));last=now;
+  if(!$("#mapScreen").classList.contains("active")){mapCatState.frame=requestAnimationFrame(frame);return;}
+  for(const c of mapCatState.cats){
+   if(c.delay>0){c.delay-=dt;continue;}
+   const dx=c.tx-c.x,dy=c.ty-c.y,d=Math.hypot(dx,dy);
+   if(d>0.12){
+    const step=Math.min(d,dt*c.speed);
+    c.x+=dx/d*step;c.y+=dy/d*step;
+    c.el.classList.add("walking");c.el.classList.remove("resting");
+    c.el.classList.toggle("facing-left",dx<0);
+    drawMapCat(c);
+   }else{c.x=c.tx;c.y=c.ty;drawMapCat(c);c.el.classList.remove("walking");c.el.classList.add("resting");}
+  }
+  mapCatState.frame=requestAnimationFrame(frame);
+ }
+ mapCatState.frame=requestAnimationFrame(frame);
+ scheduleCatWander();
+}
+function scheduleCatWander(){
+ clearTimeout(mapCatState.wanderingTimer);
+ mapCatState.wanderingTimer=setTimeout(()=>{
+  if($("#mapScreen").classList.contains("active")&&!document.querySelector("#mapScreen .overlay.show")){
+   const c=mapCatState.cats[Math.floor(Math.random()*2)];
+   if(c){c.tx=12+Math.random()*76;c.ty=22+Math.random()*68;c.delay=0;}
+  }
+  scheduleCatWander();
+ },5000+Math.random()*3500);
+}
+function visitLocationWithCats(loc){
+ startMapCats();
+ const token=++mapCatState.token;
+ clearTimeout(mapCatState.wanderingTimer);
+ const spots=[{x:Math.max(6,Math.min(94,loc.x-3)),y:Math.max(8,Math.min(94,loc.y+5))},{x:Math.max(6,Math.min(94,loc.x+4)),y:Math.max(8,Math.min(94,loc.y+6))}];
+ const distance=Math.max(...mapCatState.cats.map((c,i)=>Math.hypot(spots[i].x-c.x,spots[i].y-c.y)));
+ mapCatState.cats.forEach((c,i)=>{c.tx=spots[i].x;c.ty=spots[i].y;c.speed=Math.max(.13,Math.min(.5,distance/1350));c.delay=i*300;});
+ const start=performance.now();
+ function wait(){
+  if(token!==mapCatState.token)return;
+  const arrived=mapCatState.cats.every(c=>Math.hypot(c.tx-c.x,c.ty-c.y)<.25);
+  if(arrived||performance.now()-start>3600){
+   openLocation(loc);
+   scheduleCatWander();
+  }else requestAnimationFrame(wait);
+ }
+ requestAnimationFrame(wait);
 }
 
 function pageSound(){
