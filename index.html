@@ -1495,7 +1495,7 @@ function openBridgeBoat(loc){
  list.append(heading);
  STORIES.filter(st=>st.location==="bridge").forEach(st=>{
   const b=document.createElement("button");b.type="button";b.className="work-choice";
-  b.innerHTML=`<span><small>STORY ${String(st.id).padStart(2,"0")}</small><strong>${st.title}</strong></span>${shopStaffSvg(st.id)}<span class="status">${read.has(st.id)?"읽음 ✓":"읽어보기　›"}</span>`;
+  b.innerHTML=`<span><small>STORY ${String(st.id).padStart(2,"0")}</small><strong>${st.title}</strong></span><span class="status">${read.has(st.id)?"읽음 ✓":"읽어보기　›"}</span>`;
   b.onclick=()=>openStory(st);list.append(b);
  });
  stage.querySelector(".bridge-boat-trigger").onclick=()=>{
