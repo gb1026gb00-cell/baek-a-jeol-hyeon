@@ -1177,6 +1177,10 @@ button{font:inherit;cursor:pointer}
  #shopPersistentPlayer.shop-player-floating iframe{width:106px!important;height:60px!important}
  #shopPersistentPlayer.shop-player-floating .shop-music-player-label{font-size:8px!important}
 }
+</style><style id="shop-player-close-button-css">
+#shopPersistentPlayer.shop-player-floating{overflow:visible!important}
+#shopPersistentPlayer .shop-player-close{position:absolute;top:-11px;right:-10px;z-index:3;width:27px;height:27px;padding:0;display:flex;align-items:center;justify-content:center;border:2px solid #f9f0e2;border-radius:50%;background:#384761;color:#fff;font-size:23px;line-height:1;cursor:pointer;box-shadow:0 2px 6px #1b203b77}
+#shopPersistentPlayer .shop-player-close:focus-visible{outline:3px solid #e9b96d;outline-offset:2px}
 </style></head>
 <body>
 <div id="app">
@@ -1611,6 +1615,20 @@ function openShopMusic(loc){
   player.id="shopPersistentPlayer";
   document.body.appendChild(player);
   player.classList.add("shop-player-floating");
+  const close=document.createElement("button");
+  close.type="button";
+  close.className="shop-player-close";
+  close.textContent="×";
+  close.setAttribute("aria-label","유튜브 음악 끄기");
+  close.title="음악 끄기";
+  close.onclick=()=>{
+   stopShopMusic();
+   const activeShop=document.querySelector("#locationOverlay .shop-music-player:not(#shopPersistentPlayer)");
+   if(activeShop)activeShop.style.display="";
+   const playArea=document.querySelector("#locationOverlay .shop-music-player");
+   if(!playArea && currentLocation?.id==="shop" && !document.querySelector("#storyOverlay.show"))openShopMusic(currentLocation);
+  };
+  player.appendChild(close);
  };
  stage.querySelector(".shop-music-trigger").onclick=()=>{
   if(modal.classList.contains("shop-open"))return;
