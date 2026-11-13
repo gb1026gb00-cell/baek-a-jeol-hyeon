@@ -1108,7 +1108,17 @@ button{font:inherit;cursor:pointer}
 /* Never allow a clock to render outside the clock-tower location. */
 #locationOverlay .location-modal:not(.clock-calendar-mode) .clock-dial-stage,
 #locationOverlay .location-modal:not(.clock-calendar-mode) .clock-pocket-wrap{display:none!important}
-</style><style id="cafe-photo-cake-css">.cafe-cake-trigger{width:min(88%,420px)}.cafe-cake-photo{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:18px;box-shadow:0 10px 22px #30212b45}.cafe-cake-trigger:hover .cafe-cake-photo{filter:brightness(1.04)}</style></head>
+</style><style id="cafe-photo-cake-css">.cafe-cake-trigger{width:min(88%,420px)}.cafe-cake-photo{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:18px;box-shadow:0 10px 22px #30212b45}.cafe-cake-trigger:hover .cafe-cake-photo{filter:brightness(1.04)}</style><style id="ghibli-six-object-assets-css">
+/* The approved six hand-painted assets; keep the existing interactive buttons and story UI. */
+.ghibli-object{display:block;max-width:100%;height:auto;object-fit:contain;pointer-events:none;border-radius:12px}
+.school-diary-cover .ghibli-diary{width:100%;height:100%;object-fit:contain}
+.bridge-boat-trigger .ghibli-boat,.shop-music-trigger .ghibli-musicbox{width:100%;aspect-ratio:1/1;object-fit:contain}
+.cafe-cake-trigger .cafe-cake-photo{aspect-ratio:1/1;object-fit:contain;border-radius:14px}
+.garden-camera-body .garden-camera-visual{object-fit:contain}
+.clock-pocket-wrap .ghibli-watch-decor{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.22;pointer-events:none;z-index:0}
+.clock-pocket-wrap .clock-face{position:relative;z-index:2}
+.clock-pocket-wrap .clock-pocket-loop,.clock-pocket-wrap .clock-pocket-cat{z-index:3}
+</style></head>
 <body>
 <div id="app">
   <section id="introScreen" class="screen video-screen active">
@@ -1421,20 +1431,7 @@ function openSchoolDiary(loc){
  const cover=document.createElement("button");
  cover.type="button";cover.className="school-diary-cover";
  cover.setAttribute("aria-label","교환일기 펼치기");
- cover.innerHTML=`<svg class="school-cover-art" viewBox="0 0 300 390" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-<g fill="none" stroke="#3c4b61" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M62 125 101 94 119 108 151 77 192 118 212 100 246 127"/><path d="M206 49a16 16 0 1 1-16-22 17 17 0 0 0 16 22Z"/><path d="m88 62 0 10m-5-5h10m145 19v10m-5-5h10" stroke-width="1.7"/></g>
-<rect x="48" y="154" width="205" height="67" rx="13" fill="#f8f2e9" stroke="#aab0b5" stroke-width="2"/><rect x="54" y="160" width="193" height="55" rx="9" fill="none" stroke="#d1c6bb" stroke-width="1"/><text x="150" y="197" text-anchor="middle" fill="#2f3c50" font-size="28" font-weight="600" font-family="serif">교환일기</text>
-<g transform="translate(165 270)">
-<!-- curled body on the right, head clearly at the LEFT/front -->
-<path d="M37 43 C37 14 65 7 83 23 C105 39 95 74 67 75 C52 75 43 67 37 57 Z" fill="#34353b"/>
-<path d="M13 46 L10 21 L25 31 L41 19 L42 45 C44 64 31 73 17 70 C0 68 -5 55 13 46 Z" fill="#34353b"/>
-<path d="M51 64 C65 80 92 70 83 56 C78 49 70 51 68 56" fill="none" stroke="#f5eee4" stroke-width="2.3" stroke-linecap="round"/>
-<path d="M9 53 Q15 59 21 53 M27 53 Q33 59 39 53" fill="none" stroke="#f5eee4" stroke-width="2" stroke-linecap="round"/>
-<path d="M22 60 l3 2 3-2" fill="none" stroke="#f5eee4" stroke-width="1.4" stroke-linecap="round"/>
-<path d="M6 62 l-12 -3 M6 66 l-12 2 M39 62 l12 -3 M39 66 l12 2" fill="none" stroke="#34353b" stroke-width="1.7" stroke-linecap="round"/>
-</g>
-<g fill="#43454c" transform="translate(70 324)"><ellipse cx="0" cy="9" rx="11" ry="8"/><circle cx="-11" cy="-5" r="4"/><circle cx="-3" cy="-11" r="4"/><circle cx="6" cy="-10" r="4"/><circle cx="14" cy="-3" r="4"/></g><g fill="#43454c" transform="translate(108 302) scale(.65)"><ellipse cx="0" cy="9" rx="11" ry="8"/><circle cx="-11" cy="-5" r="4"/><circle cx="-3" cy="-11" r="4"/><circle cx="6" cy="-10" r="4"/><circle cx="14" cy="-3" r="4"/></g>
-</svg><span class="school-cover-hint">일기장을 눌러 펼쳐보세요</span>`;
+ cover.innerHTML=`<img class="ghibli-object ghibli-diary" src="ghibli/school_diary.webp" alt="교환일기">`;
  cover.onclick=()=>{
   pageSound();
   const book=document.createElement("div");book.className="school-diary-book";
@@ -1472,19 +1469,7 @@ function openBridgeBoat(loc){
  const stage=document.createElement("div");stage.className="bridge-boat-stage";
  stage.innerHTML=`<div class="bridge-boat-water" aria-hidden="true"><span class="fx-ripple"></span><span class="fx-ripple"></span><span class="fx-ripple"></span></div>
  <button class="bridge-boat-trigger" type="button" aria-label="물 위의 종이 돛단배 펼치기">
- <svg viewBox="0 0 340 230" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
- <defs><linearGradient id="bridgePaperShade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f3ebdc"/><stop offset=".55" stop-color="#ded4c5"/><stop offset="1" stop-color="#b9b9b4"/></linearGradient></defs>
- <path d="M22 109L101 131 168 37 238 129 320 102 283 182 68 181Z" fill="url(#bridgePaperShade)" stroke="#677487" stroke-width="2.2" stroke-linejoin="round"/>
- <path d="M101 131L168 37 238 129 170 157Z" fill="#e5dfd5" stroke="#82909c" stroke-width="1.5"/>
- <path d="M168 37L170 157 238 129Z" fill="#c5cbd0" opacity=".72"/>
- <path d="M22 109L170 157 320 102 283 182 68 181Z" fill="#d8cbb9" stroke="#687889" stroke-width="2.2" stroke-linejoin="round"/>
- <path d="M22 109L170 157 68 181Z" fill="#ede4d5" opacity=".85"/>
- <path d="M320 102L170 157 283 182Z" fill="#bdc4c6" opacity=".72"/>
- <path d="M68 181L170 157 283 182M101 131L170 157 238 129M168 37L168 155" fill="none" stroke="#77889a" stroke-width="1.5" opacity=".75"/>
- <path d="M65 142Q101 124 134 147M213 155Q249 134 277 146" stroke="#758a99" stroke-width="7" opacity=".11" fill="none"/>
- <path d="M120 113q12 8 25 2m72 25q11 8 23 2M98 164q20-5 37 1" stroke="#8b958e" stroke-width="2" opacity=".35" fill="none"/>
- <path d="M84 167q16 8 32 3m120-4q12 5 24-1" stroke="#6c8194" stroke-width="2" opacity=".4" fill="none"/>
- </svg></button><p class="bridge-boat-hint">물 위에 띄운 종이배를 펼쳐 보세요</p>`;
+ <img class="ghibli-object ghibli-boat" src="ghibli/bridge_boat.webp" alt="종이배"></button><p class="bridge-boat-hint">물 위에 띄운 종이배를 펼쳐 보세요</p>`;
  modal.insertBefore(stage,list);
  const oldDrips=modal.querySelector(".bridge-drip-layer");if(oldDrips)oldDrips.remove();
  const dripLayer=document.createElement("div");dripLayer.className="bridge-drip-layer";dripLayer.setAttribute("aria-hidden","true");
@@ -1538,22 +1523,7 @@ function openShopMusic(loc){
  $("#locationTitle").textContent=loc.name;
  const stage=document.createElement("div");stage.className="shop-music-stage";
  stage.innerHTML=`<button type="button" class="shop-music-trigger" aria-label="오르골 태엽 감아 악보 펼치기">
- <svg viewBox="0 0 330 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
- <defs><linearGradient id="catBox" x2="0" y2="1"><stop stop-color="#fff8e8"/><stop offset="1" stop-color="#d9c9ac"/></linearGradient></defs>
- <ellipse cx="162" cy="236" rx="120" ry="13" fill="#233047" opacity=".16"/>
- <g class="shop-music-lid"><rect x="45" y="37" width="236" height="91" rx="23" fill="#f9efdd" stroke="#695d60" stroke-width="4"/><rect x="55" y="47" width="216" height="71" rx="16" fill="#35435f"/><path d="M95 95Q153 52 231 92" fill="none" stroke="#ddbb7c" stroke-width="2" opacity=".65"/><path d="M157 62a19 19 0 1 0 19 29a18 18 0 1 1-19-29" fill="#e9c78e"/><g fill="#e9c78e"><circle cx="89" cy="70" r="3"/><circle cx="233" cy="69" r="3"/><path d="M105 94l3-8 3 8 8 3-8 3-3 8-3-8-8-3z"/></g></g>
- <rect x="45" y="115" width="236" height="114" rx="21" fill="url(#catBox)" stroke="#665e63" stroke-width="4"/>
- <rect x="55" y="132" width="216" height="81" rx="13" fill="#f9f1e3" stroke="#d6b37b" stroke-width="4"/>
- <rect x="88" y="145" width="148" height="55" rx="13" fill="#34435f"/>
- <path d="M113 186Q141 154 180 181" fill="none" stroke="#e4c18c" stroke-width="3"/>
- <g fill="#e7c28b"><path d="M125 162l3-7 3 7 7 3-7 3-3 7-3-7-7-3z"/><circle cx="207" cy="161" r="3"/><path d="M201 188a14 14 0 1 1 12-20a12 12 0 1 0-12 20"/></g>
- <path d="M143 183Q135 176 137 162L144 149L154 158Q165 154 174 159L184 149L189 165Q194 189 177 196L151 196Q141 192 143 183Z" fill="#292b32" stroke="#1c2332" stroke-width="2"/>
- <path d="M151 180q4 5 8 0m13 0q4 5 8 0" fill="none" stroke="#e7d4c5" stroke-width="2" stroke-linecap="round"/>
- <path d="M164 185l3 2 3-2" fill="none" stroke="#e7d4c5" stroke-width="1.5"/>
- <path d="M186 190q17 0 15-14" fill="none" stroke="#292b32" stroke-width="7" stroke-linecap="round"/>
- <rect x="72" y="219" width="24" height="11" rx="4" fill="#c7a36e"/><rect x="228" y="219" width="24" height="11" rx="4" fill="#c7a36e"/>
- <path d="M282 166h18m0 0v-18m0 18h15" stroke="#b28d59" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="316" cy="148" r="10" fill="none" stroke="#b28d59" stroke-width="5"/>
- </svg></button><p class="shop-music-hint">태엽을 감으면 오래된 악보가 펼쳐집니다</p>`;
+ <img class="ghibli-object ghibli-musicbox" src="ghibli/shop_musicbox.webp" alt="오르골"></button><p class="shop-music-hint">태엽을 감으면 오래된 악보가 펼쳐집니다</p>`;
  modal.insertBefore(stage,list);
  const heading=document.createElement("div");heading.className="shop-score-heading";
  heading.innerHTML="골목 상점의 악보<small>THE SONGS WE LEFT BEHIND</small>";list.append(heading);
@@ -1597,7 +1567,7 @@ function openCafeCake(loc){
  list.className="work-list cafe-receipt-list";list.innerHTML="";list.style.display="";
  $("#locationTitle").textContent=loc.name;
  const stage=document.createElement("div");stage.className="cafe-cake-stage";
- stage.innerHTML=`<button class="cafe-cake-trigger" type="button" aria-label="딸기 생크림 케이크를 눌러 영수증 꺼내기"><img class="cafe-cake-photo" alt="실사 딸기 생크림 조각케이크" src="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=700&q=85"></button><p class="cafe-cake-hint">🍓 딸기 케이크를 누르면 영수증이 나옵니다</p>`;
+ stage.innerHTML=`<button class="cafe-cake-trigger" type="button" aria-label="딸기 생크림 케이크를 눌러 영수증 꺼내기"><img class="cafe-cake-photo ghibli-object" alt="딸기 조각케이크" src="ghibli/cafe_cake.webp"></button><p class="cafe-cake-hint">🍓 딸기 케이크를 누르면 영수증이 나옵니다</p>`;
  modal.insertBefore(stage,list);
  const heading=document.createElement("div");heading.className="cafe-receipt-heading";
  heading.innerHTML="작은 카페<small>STRAWBERRY CAKE & STORIES</small>";list.append(heading);
@@ -1629,7 +1599,7 @@ function openClockDial(loc){
  $("#locationTitle").textContent=loc.name;
  list.className="work-list clock-calendar-list";list.innerHTML="";list.style.display="";
  const stage=document.createElement("div");stage.className="clock-dial-stage";
- stage.innerHTML='<div class="clock-pocket-wrap"><div class="clock-pocket-loop"></div><div class="clock-pocket-chain">✦</div><div class="clock-pocket-cat" aria-hidden="true"><svg viewBox="0 0 90 65"><path d="M15 37L17 15L33 27Q46 19 59 27L74 15L77 39Q77 58 47 58Q17 58 15 37Z" fill="#30313b" stroke="#20232c" stroke-width="2"/><path d="M27 40q5 5 10 0m17 0q5 5 10 0" stroke="#f4d5bf" stroke-width="2" fill="none"/><path d="M43 45l4 3 4-3" stroke="#f4d5bf" fill="none" stroke-width="2"/></svg></div><div class="clock-face" role="group" aria-label="시침과 분침을 각각 드래그해 시간을 맞추세요"><div class="clock-hand hour" role="slider" aria-label="시침" tabindex="0"></div><div class="clock-hand minute" role="slider" aria-label="분침" tabindex="0"></div><div class="clock-pin"></div></div></div><p class="clock-instruction">시곗바늘을 움직여 기억의 시간을 찾아주세요.</p><button class="clock-try" type="button">이 시간의 기억 펼치기</button>';
+ stage.innerHTML='<div class="clock-pocket-wrap"><img class="ghibli-watch-decor" src="ghibli/clock_watch.webp" alt="" aria-hidden="true"><div class="clock-pocket-loop"></div><div class="clock-pocket-chain">✦</div><div class="clock-pocket-cat" aria-hidden="true"><svg viewBox="0 0 90 65"><path d="M15 37L17 15L33 27Q46 19 59 27L74 15L77 39Q77 58 47 58Q17 58 15 37Z" fill="#30313b" stroke="#20232c" stroke-width="2"/><path d="M27 40q5 5 10 0m17 0q5 5 10 0" stroke="#f4d5bf" stroke-width="2" fill="none"/><path d="M43 45l4 3 4-3" stroke="#f4d5bf" fill="none" stroke-width="2"/></svg></div><div class="clock-face" role="group" aria-label="시침과 분침을 각각 드래그해 시간을 맞추세요"><div class="clock-hand hour" role="slider" aria-label="시침" tabindex="0"></div><div class="clock-hand minute" role="slider" aria-label="분침" tabindex="0"></div><div class="clock-pin"></div></div></div><p class="clock-instruction">시곗바늘을 움직여 기억의 시간을 찾아주세요.</p><button class="clock-try" type="button">이 시간의 기억 펼치기</button>';
  modal.insertBefore(stage,list);
  const face=stage.querySelector(".clock-face");
  for(let n=1;n<=12;n++){const el=document.createElement("span");el.className="clock-numeral";el.textContent=n;el.style.setProperty("--a",n*30+"deg");face.append(el);}
@@ -1697,7 +1667,7 @@ function openLocation(loc){
  modal.querySelector(".fx-scene")?.remove();modal.querySelector(".garden-camera-stage")?.remove();
  modal.querySelector(".shop-music-player")?.remove();list.className="work-list";list.innerHTML="";list.style.display="";
  const scene=document.createElement("div");scene.className="garden-camera-stage";
- scene.innerHTML=`<div class="garden-camera-body"><img class="garden-camera-visual" src="assets/5c43d6d3b173.png" alt="빈티지 폴라로이드 카메라"><button class="garden-camera-shutter" type="button" aria-label="보라색 셔터를 눌러 사진 인화하기"></button><div class="garden-camera-flash"></div></div><div class="garden-camera-hint">✿ 보라색 셔터를 눌러 추억을 인화해 주세요 ✿</div>`;
+ scene.innerHTML=`<div class="garden-camera-body"><img class="garden-camera-visual" src="ghibli/garden_polaroid.webp" alt="빈티지 폴라로이드 카메라"><button class="garden-camera-shutter" type="button" aria-label="보라색 셔터를 눌러 사진 인화하기"></button><div class="garden-camera-flash"></div></div><div class="garden-camera-hint">✿ 보라색 셔터를 눌러 추억을 인화해 주세요 ✿</div>`;
  modal.insertBefore(scene,list);
  const works=STORIES.filter(st=>st.location===loc.id);
  works.forEach((st,i)=>{
