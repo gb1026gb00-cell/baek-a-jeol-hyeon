@@ -1043,6 +1043,32 @@ button{font:inherit;cursor:pointer}
 }
 #storyOverlay .story-modal.bridge-paper-reader>*{position:relative;z-index:1}
 @media(max-width:600px){#storyOverlay .story-modal.bridge-paper-reader{border-radius:0!important}}
+</style><style id="shop-real-score-css">
+/* Actual printed score: five-line staves, clef, notes and measure bars */
+.shop-music-mode #workList.shop-score-list{
+ gap:0;
+ padding:27px 20px 34px;
+ background:linear-gradient(100deg,#8e9dad18,transparent 22%,#fff9ee60 40%,transparent 75%,#8190a51d),#eee8dc!important;
+ border:1px solid #b5ab9c;
+ box-shadow:4px 9px 20px #26354930;
+}
+.shop-music-mode .shop-score-heading{background:transparent;text-align:center;padding:4px 0 8px}
+.shop-score-music{display:block;width:100%;height:auto;margin:7px 0 13px;overflow:visible}
+.shop-score-music .staff-line{stroke:#46546b;stroke-width:1.15;opacity:.75}
+.shop-score-music .music-note{fill:#46546b;stroke:#46546b;stroke-width:1.4}
+.shop-score-music .measure-bar{stroke:#64738a;stroke-width:1.2}
+.shop-music-mode .shop-score-list .work-choice{
+ display:flex;flex-direction:column;gap:0;width:100%;border:0;border-radius:0;
+ background:transparent!important;color:#34445d;padding:6px 4px 12px;
+ border-bottom:1px dashed #8992a380;text-align:left;box-shadow:none;
+}
+.shop-score-list .work-choice>span:first-child{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.shop-score-list .work-choice>span:first-child strong{font-family:'Gowun Batang',serif;font-size:15px}
+.shop-score-list .work-choice .status{align-self:flex-end;font-size:11px}
+.shop-score-list .work-choice .shop-score-music{margin:4px 0 1px}
+.shop-score-list .work-choice:hover{background:#ffffff40!important}
+.shop-score-list .shop-score-footnote{font:italic 11px Georgia,serif;color:#65748a;text-align:center;padding-top:14px}
+@media(max-width:600px){.shop-music-mode #workList.shop-score-list{padding:20px 12px 28px}}
 </style></head>
 <body>
 <div id="app">
@@ -1427,7 +1453,7 @@ function openBridgeBoat(loc){
  list.append(heading);
  STORIES.filter(st=>st.location==="bridge").forEach(st=>{
   const b=document.createElement("button");b.type="button";b.className="work-choice";
-  b.innerHTML=`<span><small>STORY ${String(st.id).padStart(2,"0")}</small><strong>${st.title}</strong></span><span class="status">${read.has(st.id)?"읽음 ✓":"읽어보기　›"}</span>`;
+  b.innerHTML=`<span><small>STORY ${String(st.id).padStart(2,"0")}</small><strong>${st.title}</strong></span>${shopStaffSvg(st.id)}<span class="status">${read.has(st.id)?"읽음 ✓":"읽어보기　›"}</span>`;
   b.onclick=()=>openStory(st);list.append(b);
  });
  stage.querySelector(".bridge-boat-trigger").onclick=()=>{
@@ -1443,6 +1469,16 @@ function stopShopMusic(){
  const frame=document.querySelector("#shopYoutubePlayer");
  if(frame){frame.src="about:blank";frame.remove();}
 }
+
+function shopStaffSvg(variant=0){
+ const notes=variant%2===0
+  ? [[87,42],[115,34],[145,47],[183,39],[214,31],[249,42],[276,35]]
+  : [[88,34],[120,47],[153,39],[183,31],[219,42],[251,34],[279,47]];
+ const lines=[25,34,43,52,61].map(y=>'<path class="staff-line" d="M18 '+y+'H314"/>').join("");
+ const marks=notes.map(([x,y],i)=>'<g class="music-note"><ellipse cx="'+x+'" cy="'+y+'" rx="6.5" ry="4.2" transform="rotate(-22 '+x+' '+y+')"/><path fill="none" d="M'+(x+6)+' '+y+'V'+(y-27)+'"/>'+(i===2||i===5?'<path fill="none" d="M'+(x+6)+' '+(y-27)+'q12 7 0 16"/>':"")+'</g>').join("");
+ return '<svg class="shop-score-music" viewBox="0 0 330 80" role="img" aria-label="높은음자리표와 음표가 그려진 오선 악보">'+lines+'<text x="25" y="66" font-size="65" font-family="serif" fill="#46546b">𝄞</text><path class="measure-bar" d="M169 25V61M310 25V61"/>'+marks+'</svg>';
+}
+
 function openShopMusic(loc){
  stopShopMusic();
  document.querySelector("#locationOverlay .shop-music-player")?.remove();
@@ -1475,11 +1511,13 @@ function openShopMusic(loc){
  modal.insertBefore(stage,list);
  const heading=document.createElement("div");heading.className="shop-score-heading";
  heading.innerHTML="골목 상점의 악보<small>THE SONGS WE LEFT BEHIND</small>";list.append(heading);
+ list.insertAdjacentHTML("beforeend",shopStaffSvg(0));
  STORIES.filter(st=>st.location==="shop").forEach(st=>{
   const b=document.createElement("button");b.type="button";b.className="work-choice";
   b.innerHTML=`<span><small>STORY ${String(st.id).padStart(2,"0")}</small><strong>${st.title}</strong></span><span class="status">${read.has(st.id)?"읽음 ✓":"읽어보기　›"}</span>`;
   b.onclick=()=>openStory(st);list.append(b);
  });
+ const scoreFoot=document.createElement("div");scoreFoot.className="shop-score-footnote";scoreFoot.textContent="rit. · and the melody remains";list.append(scoreFoot);
  const player=document.createElement("div");player.className="shop-music-player";
  player.innerHTML=`<div class="shop-music-player-label">ATEEZ · 야간비행 (Turbulence)<br>공식 유튜브 영상</div><button type="button" class="action shop-play-video">▶ 영상 재생하기</button><div class="shop-music-player-note">영상은 이 페이지 안에서 재생됩니다. 유튜브 로고를 누르면 이동할 수 있어요.</div>`;
  list.after(player);
