@@ -1118,6 +1118,13 @@ button{font:inherit;cursor:pointer}
 .clock-pocket-wrap .ghibli-watch-decor{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.22;pointer-events:none;z-index:0}
 .clock-pocket-wrap .clock-face{position:relative;z-index:2}
 .clock-pocket-wrap .clock-pocket-loop,.clock-pocket-wrap .clock-pocket-cat{z-index:3}
+</style><style id="shop-persistent-music-css">
+/* Keep the same YouTube iframe mounted while the shop story is being read. */
+#shopPersistentPlayer.shop-player-floating{display:flex!important;position:fixed;z-index:99999;right:12px;bottom:12px;width:224px;max-width:calc(100vw - 24px);max-height:260px;overflow:auto;flex-direction:column;align-items:center;gap:5px;padding:9px;background:#f6f0e6;border:2px solid #b8a487;border-radius:13px;box-shadow:0 8px 28px #1e263b55;color:#34435a}
+#shopPersistentPlayer .shop-music-player-label{font-size:11px;text-align:center}
+#shopPersistentPlayer .shop-music-player-note{display:none}
+#shopPersistentPlayer iframe{display:block;width:200px;height:180px;max-width:100%;border:0;border-radius:7px}
+@media(max-width:600px){#shopPersistentPlayer.shop-player-floating{right:7px;bottom:7px;width:166px;padding:6px}#shopPersistentPlayer iframe{width:150px;height:135px}#shopPersistentPlayer .shop-music-player-label{font-size:10px}}
 </style></head>
 <body>
 <div id="app">
@@ -1493,6 +1500,7 @@ function openBridgeBoat(loc){
 
 
 function stopShopMusic(){
+ document.querySelector("#shopPersistentPlayer")?.remove();
  const frame=document.querySelector("#shopYoutubePlayer");
  if(frame){frame.src="about:blank";frame.remove();}
 }
@@ -1508,7 +1516,6 @@ function shopStaffSvg(variant=0){
 
 function openShopMusic(loc){
  clearClockFromOtherLocations();
- stopShopMusic();
  document.querySelector("#locationOverlay .shop-music-player")?.remove();
  currentLocation=loc;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
@@ -1535,6 +1542,7 @@ function openShopMusic(loc){
  });
  const scoreFoot=document.createElement("div");scoreFoot.className="shop-score-footnote";scoreFoot.textContent="rit. · and the melody remains";list.append(scoreFoot);
  const player=document.createElement("div");player.className="shop-music-player";
+ if(document.querySelector("#shopPersistentPlayer"))player.style.display="none";
  player.innerHTML=`<div class="shop-music-player-label">ATEEZ · 야간비행 (Turbulence)<br>공식 유튜브 영상</div><button type="button" class="action shop-play-video">▶ 영상 재생하기</button><div class="shop-music-player-note">영상은 이 페이지 안에서 재생됩니다. 유튜브 로고를 누르면 이동할 수 있어요.</div>`;
  list.after(player);
  player.querySelector(".shop-play-video").onclick=()=>{
@@ -1548,6 +1556,9 @@ function openShopMusic(loc){
   frame.allowFullscreen=true;
   frame.src="https://www.youtube-nocookie.com/embed/80WvAnsHOdM?playsinline=1&rel=0";
   button.replaceWith(frame);
+  player.id="shopPersistentPlayer";
+  document.body.appendChild(player);
+  player.classList.add("shop-player-floating");
  };
  stage.querySelector(".shop-music-trigger").onclick=()=>{
   if(modal.classList.contains("shop-open"))return;
@@ -1686,7 +1697,7 @@ function openLocation(loc){
 }
 function openStory(st){
   currentStory=st;
-  if(st.location==="shop")stopShopMusic();
+  if(st.location==="shop")document.querySelector("#shopPersistentPlayer")?.classList.add("shop-player-reading");
   const gardenReader=st.location==="garden";
   document.querySelector("#storyOverlay .story-modal").classList.toggle("shop-score-reader",st.location==="shop");
   document.querySelector("#storyOverlay .story-modal").classList.toggle("cafe-receipt-reader",st.location==="cafe");
