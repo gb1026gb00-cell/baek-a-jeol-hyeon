@@ -1143,12 +1143,12 @@ function visitLocationWithCats(loc){
  clearTimeout(mapCatState.wanderingTimer);
  const spots=[{x:Math.max(6,Math.min(94,loc.x-3)),y:Math.max(8,Math.min(94,loc.y+5))},{x:Math.max(6,Math.min(94,loc.x+4)),y:Math.max(8,Math.min(94,loc.y+6))}];
  const distance=Math.max(...mapCatState.cats.map((c,i)=>Math.hypot(spots[i].x-c.x,spots[i].y-c.y)));
- mapCatState.cats.forEach((c,i)=>{c.tx=spots[i].x;c.ty=spots[i].y;c.speed=Math.max(.13,Math.min(.5,distance/1350));c.delay=i*300;});
+ mapCatState.cats.forEach((c,i)=>{c.tx=spots[i].x;c.ty=spots[i].y;c.speed=Math.max(.095,Math.min(.38,distance/1800));c.delay=i*300;});
  const start=performance.now();
  function wait(){
   if(token!==mapCatState.token)return;
   const arrived=mapCatState.cats.every(c=>Math.hypot(c.tx-c.x,c.ty-c.y)<.25);
-  if(arrived||performance.now()-start>3600){
+  if(arrived||performance.now()-start>5000){
    openLocation(loc);
    scheduleCatWander();
   }else requestAnimationFrame(wait);
