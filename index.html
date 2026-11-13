@@ -1131,6 +1131,22 @@ button{font:inherit;cursor:pointer}
 .garden-camera-mode .garden-camera-shutter{left:27%;top:40%;width:7.5%;height:auto;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d8b0ed 0%,#a777c3 45%,#78528f 78%,#573d75 100%);border:2px solid #f9e3ff;box-shadow:0 2px 6px #37234388,inset 0 1px 2px #fff8;z-index:5;cursor:pointer;touch-action:manipulation}
 .garden-camera-mode .garden-camera-shutter:active{transform:scale(.9)}
 .garden-camera-mode .garden-camera-shutter:focus-visible{outline:3px solid #5d388e;outline-offset:3px}
+</style><style id="clock-star-selection-v2">
+/* New two-star memory selection; original drag-clock is completely replaced. */
+.clock-stars-mode .clock-dial-stage{display:flex;flex-direction:column;align-items:center}
+.clock-stars-mode .clock-star-scene{position:relative;width:min(92vw,460px);margin:4px auto 8px;isolation:isolate}
+.clock-stars-mode .clock-star-watch{display:block;width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 12px 18px #23304c35);border-radius:18px}
+.clock-stars-mode .clock-memory-star{position:absolute;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;width:86px;height:86px;border:1px solid #fff1b9;border-radius:50%;color:#fff5c6;background:radial-gradient(circle,#6b6f9c 0%,#354568 74%);box-shadow:0 0 0 4px #fff8e455,0 0 22px #e8c779b8;cursor:pointer;animation:clockStarFloat 3.4s ease-in-out infinite}
+.clock-stars-mode .clock-memory-star span{font-size:36px;line-height:1;text-shadow:0 0 10px #fff3a9}
+.clock-stars-mode .clock-memory-star small{font-size:12px;font-weight:700;white-space:nowrap;color:#fff8e6}
+.clock-stars-mode .clock-memory-july{left:0%;top:22%}
+.clock-stars-mode .clock-memory-november{right:0%;bottom:15%;animation-delay:-1.6s}
+.clock-stars-mode .clock-memory-star.selected{background:radial-gradient(circle,#e1b96d,#85658c);box-shadow:0 0 0 5px #fff4ca,0 0 30px #ffd36c}
+.clock-stars-mode .clock-memory-star:focus-visible{outline:3px solid #4a5480;outline-offset:7px}
+.clock-stars-mode .clock-instruction{text-align:center}
+@keyframes clockStarFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@media(max-width:600px){.clock-stars-mode .clock-star-scene{width:min(94vw,350px)}.clock-stars-mode .clock-memory-star{width:66px;height:66px}.clock-stars-mode .clock-memory-star span{font-size:28px}.clock-stars-mode .clock-memory-star small{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.clock-stars-mode .clock-memory-star{animation:none}}
 </style></head>
 <body>
 <div id="app">
@@ -1611,45 +1627,33 @@ function openClockDial(loc){
  currentLocation=loc;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
  modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","cafe-cake-mode","cafe-receipt-open","clock-calendar-open");
- modal.classList.add("clock-calendar-mode");
+ modal.classList.add("clock-calendar-mode","clock-stars-mode");
  ["garden-camera-stage","school-diary-stage","bridge-boat-stage","shop-music-stage","shop-music-player","cafe-cake-stage","clock-dial-stage","fx-scene"].forEach(c=>modal.querySelector("."+c)?.remove());
  $("#locationTitle").textContent=loc.name;
  list.className="work-list clock-calendar-list";list.innerHTML="";list.style.display="";
  const stage=document.createElement("div");stage.className="clock-dial-stage";
- stage.innerHTML='<div class="clock-pocket-wrap"><img class="ghibli-watch-decor" src="ghibli/clock_watch.webp" alt="" aria-hidden="true"><div class="clock-pocket-loop"></div><div class="clock-pocket-chain">✦</div><div class="clock-pocket-cat" aria-hidden="true"><svg viewBox="0 0 90 65"><path d="M15 37L17 15L33 27Q46 19 59 27L74 15L77 39Q77 58 47 58Q17 58 15 37Z" fill="#30313b" stroke="#20232c" stroke-width="2"/><path d="M27 40q5 5 10 0m17 0q5 5 10 0" stroke="#f4d5bf" stroke-width="2" fill="none"/><path d="M43 45l4 3 4-3" stroke="#f4d5bf" fill="none" stroke-width="2"/></svg></div><div class="clock-face" role="group" aria-label="시침과 분침을 각각 드래그해 시간을 맞추세요"><div class="clock-hand hour" role="slider" aria-label="시침" tabindex="0"></div><div class="clock-hand minute" role="slider" aria-label="분침" tabindex="0"></div><div class="clock-pin"></div></div></div><p class="clock-instruction">시곗바늘을 움직여 기억의 시간을 찾아주세요.</p><button class="clock-try" type="button">이 시간의 기억 펼치기</button>';
+ stage.innerHTML=`<div class="clock-star-scene">
+ <img class="clock-star-watch" src="ghibli/clock_watch.webp" alt="별이 담긴 금빛 회중시계">
+ <button type="button" class="clock-memory-star clock-memory-july" aria-label="7월의 별을 모아 기억 열기"><span aria-hidden="true">✦</span><small>7월의 별</small></button>
+ <button type="button" class="clock-memory-star clock-memory-november" aria-label="11월의 별을 모아 기억 열기"><span aria-hidden="true">✦</span><small>11월의 별</small></button>
+ </div><p class="clock-instruction">반짝이는 별을 눌러 그날의 기억을 모아 보세요.</p>`;
  modal.insertBefore(stage,list);
- const face=stage.querySelector(".clock-face");
- for(let n=1;n<=12;n++){const el=document.createElement("span");el.className="clock-numeral";el.textContent=n;el.style.setProperty("--a",n*30+"deg");face.append(el);}
- let hour=0,minute=0;
- const hourHand=stage.querySelector(".clock-hand.hour"),minuteHand=stage.querySelector(".clock-hand.minute");
- function draw(){hourHand.style.setProperty("--angle",hour+"deg");minuteHand.style.setProperty("--angle",minute+"deg");}
- function move(which,e){const r=face.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;const angle=(Math.atan2(e.clientX-cx,-(e.clientY-cy))*180/Math.PI+360)%360;if(which==="hour")hour=angle;else minute=angle;draw();}
- [hourHand,minuteHand].forEach((hand,i)=>{
-  const which=i===0?"hour":"minute";
-  hand.addEventListener("pointerdown",e=>{e.preventDefault();hand.setPointerCapture(e.pointerId);move(which,e);});
-  hand.addEventListener("pointermove",e=>{if(hand.hasPointerCapture(e.pointerId))move(which,e);});
-  hand.addEventListener("keydown",e=>{if(e.key!=="ArrowLeft"&&e.key!=="ArrowRight")return;e.preventDefault();const delta=e.key==="ArrowRight"?6:-6;if(which==="hour")hour=(hour+delta+360)%360;else minute=(minute+delta+360)%360;draw();});
- });
- // Angles are evaluated independently so the hands can be adjusted comfortably.
- const near=(a,b,tolerance)=>Math.abs(((a-b+540)%360)-180)<=tolerance;
  const stories=STORIES.filter(st=>st.location==="clock");
- stage.querySelector(".clock-try").onclick=()=>{
-  let month,story;
-  if(near(hour,215,23)&&near(minute,60,25)){month="11월";story=stories[0];}
-  else if(near(hour,343,23)&&near(minute,156,25)){month="7월";story=stories[1];}
-  else {stage.querySelector(".clock-instruction").textContent="아직 잠겨 있어요. 7시 10분 또는 11시 26분 근처로 맞춰 보세요.";return;}
+ function reveal(month,story,star){
+  stage.querySelectorAll(".clock-memory-star").forEach(b=>b.classList.toggle("selected",b===star));
   list.innerHTML="";
   const title=document.createElement("div");title.className="clock-calendar-month";title.textContent=month;list.append(title);
   const grid=document.createElement("div");grid.className="clock-calendar-grid";grid.setAttribute("aria-label",month+" 날짜 없는 달력");
   for(let i=0;i<35;i++){const cell=document.createElement("div");cell.className="clock-calendar-cell";grid.append(cell);}list.append(grid);
-  if(story){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";b.innerHTML="<small>기억의 조각 · "+month+"</small>";const name=document.createElement("strong");name.textContent=story.title;b.append(name);b.onclick=()=>openStory(story);list.append(b);}
-  // Preserve access to the existing third clock-tower story.
+  if(story){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";const label=document.createElement("small");label.textContent="기억의 조각 · "+month;b.append(label);const name=document.createElement("strong");name.textContent=story.title;b.append(name);b.onclick=()=>openStory(story);list.append(b);}
   if(stories[2]){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";const label=document.createElement("small");label.textContent="시계탑의 또 다른 이야기";b.append(label);const name=document.createElement("strong");name.textContent=stories[2].title;b.append(name);b.onclick=()=>openStory(stories[2]);list.append(b);}
   const note=document.createElement("div");note.className="clock-calendar-note";note.textContent="날짜 없이 남겨 둔 우리의 달력";list.append(note);
   modal.classList.remove("clock-calendar-open");void list.offsetWidth;modal.classList.add("clock-calendar-open");
-  stage.querySelector(".clock-instruction").textContent=month+"의 기억이 펼쳐졌어요.";
- };
- draw();$("#locationOverlay").classList.add("show");
+  stage.querySelector(".clock-instruction").textContent=month+"의 기억이 펼쳐졌어요. 다른 별도 눌러 보세요.";
+ }
+ stage.querySelector(".clock-memory-july").onclick=e=>reveal("7월",stories[1],e.currentTarget);
+ stage.querySelector(".clock-memory-november").onclick=e=>reveal("11월",stories[0],e.currentTarget);
+ $("#locationOverlay").classList.add("show");
 }
 
 function clearClockFromOtherLocations(){
