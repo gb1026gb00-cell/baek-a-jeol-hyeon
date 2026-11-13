@@ -1181,6 +1181,33 @@ button{font:inherit;cursor:pointer}
 #shopPersistentPlayer.shop-player-floating{overflow:visible!important}
 #shopPersistentPlayer .shop-player-close{position:absolute;top:-11px;right:-10px;z-index:3;width:27px;height:27px;padding:0;display:flex;align-items:center;justify-content:center;border:2px solid #f9f0e2;border-radius:50%;background:#384761;color:#fff;font-size:23px;line-height:1;cursor:pointer;box-shadow:0 2px 6px #1b203b77}
 #shopPersistentPlayer .shop-player-close:focus-visible{outline:3px solid #e9b96d;outline-offset:2px}
+</style><style id="garden-shutter-and-youtube-tap-fix">
+/* Keep the camera's illustrated purple shutter visible; transparent touch target only. */
+.garden-camera-mode .garden-camera-shutter,
+.garden-camera-mode .garden-camera-shutter:active{
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ outline:none;left:39%!important;top:45%!important;width:15%!important;
+ min-width:40px;height:auto!important;aspect-ratio:1;
+ transform:translate(-50%,-50%)!important;opacity:1;z-index:5;
+ -webkit-tap-highlight-color:transparent;
+}
+.garden-camera-mode .garden-camera-shutter:focus-visible{outline:2px dashed #8e6db4!important;outline-offset:2px}
+/* Make YouTube controls large enough to operate on mobile. Keep the X button. */
+#shopPersistentPlayer.shop-player-floating{
+ width:230px!important;max-width:calc(100vw - 24px)!important;
+ max-height:none!important;padding:7px!important;right:12px!important;
+ bottom:12px!important;overflow:visible!important;
+}
+#shopPersistentPlayer.shop-player-floating iframe{
+ display:block!important;width:212px!important;height:160px!important;
+ max-width:100%!important;min-height:160px!important;pointer-events:auto!important;
+}
+#shopPersistentPlayer.shop-player-floating .shop-music-player-label{font-size:10px!important}
+#shopPersistentPlayer .shop-player-close{width:34px!important;height:34px!important;top:-13px!important;right:-12px!important;touch-action:manipulation}
+@media(max-width:600px){
+ #shopPersistentPlayer.shop-player-floating{width:218px!important;right:9px!important;bottom:9px!important;padding:6px!important}
+ #shopPersistentPlayer.shop-player-floating iframe{width:202px!important;height:152px!important;min-height:152px!important}
+}
 </style></head>
 <body>
 <div id="app">
