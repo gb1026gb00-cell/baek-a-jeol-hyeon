@@ -1104,6 +1104,24 @@ button{font:inherit;cursor:pointer}
 .clock-calendar-mode .clock-calendar-month{font-family:'Gowun Batang',serif;font-weight:700}
 .clock-calendar-mode .clock-calendar-cell{border-color:#b6b1b0;background:#fffaf050}
 @media(max-width:600px){.clock-pocket-wrap .clock-numeral{transform:translate(-50%,-50%) rotate(var(--a)) translateY(-29vw) rotate(calc(-1 * var(--a)));font-size:15px}}
+</style><style id="clock-birthday-chat-css">
+.clock-calendar-mode.clock-chat-open .clock-dial-stage{display:none!important}
+.clock-calendar-mode.clock-chat-open #workList.clock-calendar-list{display:block!important;width:min(95%,530px);padding:0;margin:10px auto 20px;border:0;border-radius:15px;overflow:hidden;background:#b7c9d1;box-shadow:0 8px 25px #121b2c55;animation:clockPageDrop .45s ease-out both}
+.clock-birthday-chat{min-height:360px;padding:0 16px 30px;background:#b7c9d1;color:#354653;font-family:'Gowun Batang',serif}
+.clock-chat-header{margin:0 -16px 24px;padding:17px 16px;text-align:center;background:#b7c9d1;border-bottom:1px solid #8fa8b4;font-size:17px;font-weight:700}
+.clock-chat-date{width:max-content;margin:0 auto 27px;padding:6px 16px;border-radius:14px;background:#dce6e9;color:#546775;font-size:12px}
+.clock-chat-message{display:flex;align-items:flex-start;gap:10px;margin:0 0 28px}
+.clock-chat-avatar{display:grid;place-items:center;flex:0 0 39px;width:39px;height:39px;border-radius:14px;background:#394b61;font-size:23px}
+.clock-chat-body{display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.clock-chat-body>small{font-size:12px}
+.clock-chat-bubble,.clock-chat-reading{background:#fff9ec;color:#343d48;border-radius:4px 15px 15px 15px;box-shadow:0 2px 5px #46596a22}
+.clock-chat-bubble{padding:13px 15px;font-size:15px}
+.clock-chat-time{color:#647782;font-size:10px!important}
+.clock-chat-read,.clock-chat-finish{display:block;margin:18px auto 0;padding:11px 36px;border:1px solid #c7b99f;border-radius:12px;background:#fff9ec;color:#344653;font:15px 'Gowun Batang',serif;cursor:pointer}
+.clock-chat-reading{margin:12px 0 0;padding:24px 19px 26px}
+.clock-chat-reading h3{margin:0 0 20px;text-align:center;font-size:19px;line-height:1.5}
+.clock-chat-story-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:2.05}
+.clock-chat-finish{margin-top:30px;background:#e9e1d3}
 </style></head>
 <body>
 <div id="app">
@@ -1629,7 +1647,7 @@ function openCafeCake(loc){
 function openClockDial(loc){
  currentLocation=loc;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
- modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","cafe-cake-mode","cafe-receipt-open","clock-calendar-open");
+ modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","cafe-cake-mode","cafe-receipt-open","clock-calendar-open","clock-chat-open");
  modal.classList.add("clock-calendar-mode");
  ["garden-camera-stage","school-diary-stage","bridge-boat-stage","shop-music-stage","shop-music-player","cafe-cake-stage","clock-dial-stage","fx-scene"].forEach(c=>modal.querySelector("."+c)?.remove());
  $("#locationTitle").textContent=loc.name;
@@ -1649,24 +1667,47 @@ function openClockDial(loc){
   hand.addEventListener("pointermove",e=>{if(hand.hasPointerCapture(e.pointerId))move(which,e);});
   hand.addEventListener("keydown",e=>{if(e.key!=="ArrowLeft"&&e.key!=="ArrowRight")return;e.preventDefault();const delta=e.key==="ArrowRight"?6:-6;if(which==="hour")hour=(hour+delta+360)%360;else minute=(minute+delta+360)%360;draw();});
  });
- // Angles are evaluated independently so the hands can be adjusted comfortably.
+ // One hidden time: 7:10. Keep the original story data unchanged.
  const near=(a,b,tolerance)=>Math.abs(((a-b+540)%360)-180)<=tolerance;
- const stories=STORIES.filter(st=>st.location==="clock");
+ const story=STORIES.find(st=>st.location==="clock");
  stage.querySelector(".clock-try").onclick=()=>{
-  let month,story;
-  if(near(hour,215,23)&&near(minute,60,25)){month="11월";story=stories[0];}
-  else if(near(hour,343,23)&&near(minute,156,25)){month="7월";story=stories[1];}
-  else {stage.querySelector(".clock-instruction").textContent="아직 잠겨 있어요. 7시 10분 또는 11시 26분 근처로 맞춰 보세요.";return;}
+  if(!near(hour,215,23)||!near(minute,60,25)){
+   stage.querySelector(".clock-instruction").textContent="아직 멈춰 있는 시간이 아니에요. 시곗바늘을 다시 움직여 보세요.";
+   return;
+  }
+  stage.style.display="none";
   list.innerHTML="";
-  const title=document.createElement("div");title.className="clock-calendar-month";title.textContent=month;list.append(title);
-  const grid=document.createElement("div");grid.className="clock-calendar-grid";grid.setAttribute("aria-label",month+" 날짜 없는 달력");
-  for(let i=0;i<35;i++){const cell=document.createElement("div");cell.className="clock-calendar-cell";grid.append(cell);}list.append(grid);
-  if(story){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";b.innerHTML="<small>기억의 조각 · "+month+"</small>";const name=document.createElement("strong");name.textContent=story.title;b.append(name);b.onclick=()=>openStory(story);list.append(b);}
-  // Preserve access to the existing third clock-tower story.
-  if(stories[2]){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";const label=document.createElement("small");label.textContent="시계탑의 또 다른 이야기";b.append(label);const name=document.createElement("strong");name.textContent=stories[2].title;b.append(name);b.onclick=()=>openStory(stories[2]);list.append(b);}
-  const note=document.createElement("div");note.className="clock-calendar-note";note.textContent="날짜 없이 남겨 둔 우리의 달력";list.append(note);
-  modal.classList.remove("clock-calendar-open");void list.offsetWidth;modal.classList.add("clock-calendar-open");
-  stage.querySelector(".clock-instruction").textContent=month+"의 기억이 펼쳐졌어요.";
+  const chat=document.createElement("div");chat.className="clock-birthday-chat";
+  const head=document.createElement("div");head.className="clock-chat-header";head.textContent="최산";
+  const date=document.createElement("div");date.className="clock-chat-date";date.textContent="11월 26일";
+  const message=document.createElement("div");message.className="clock-chat-message";
+  const avatar=document.createElement("span");avatar.className="clock-chat-avatar";avatar.textContent="🐈‍⬛";
+  const body=document.createElement("div");body.className="clock-chat-body";
+  const sender=document.createElement("small");sender.textContent="최산";
+  const bubble=document.createElement("div");bubble.className="clock-chat-bubble";bubble.textContent="생일 축하한다, 영아!";
+  const time=document.createElement("small");time.className="clock-chat-time";time.textContent="00:00";
+  body.append(sender,bubble,time);message.append(avatar,body);
+  const readButton=document.createElement("button");readButton.type="button";readButton.className="clock-chat-read";readButton.textContent="읽기";
+  chat.append(head,date,message,readButton);list.append(chat);
+  modal.classList.add("clock-calendar-open","clock-chat-open");
+  readButton.onclick=()=>{
+   message.remove();readButton.remove();
+   const reading=document.createElement("div");reading.className="clock-chat-reading";
+   const title=document.createElement("h3");title.textContent=story?story.title:"";
+   const content=document.createElement("div");content.className="clock-chat-story-text";
+   if(story&&story.copy){content.textContent=story.copy;}else{content.textContent="이야기를 준비하고 있어요.";}
+   const finish=document.createElement("button");finish.type="button";finish.className="clock-chat-finish";finish.textContent=story&&read.has(story.id)?"이미 읽은 이야기":"읽음 표시하기";
+   finish.onclick=()=>{
+    if(!story)return;
+    currentStory=story;
+    const newlyFound=!read.has(story.id);
+    read.add(story.id);saveRead();$("#locationOverlay").classList.remove("show");renderMap();
+    if(newlyFound){$("#rewardIcon").textContent=story.item;$("#rewardTitle").textContent=story.title;$("#rewardOverlay").classList.add("show");}
+    else finishReward();
+   };
+   reading.append(title,content,finish);chat.append(reading);
+  };
+  stage.querySelector(".clock-instruction").textContent="11월 26일의 메시지가 도착했어요.";
  };
  draw();$("#locationOverlay").classList.add("show");
 }
