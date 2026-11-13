@@ -1089,6 +1089,21 @@ button{font:inherit;cursor:pointer}
 .clock-calendar-note{font:11px 'Gowun Batang',serif;color:#68748a;text-align:center}
 @media(max-width:600px){.clock-numeral{transform:translate(-50%,-50%) rotate(var(--a)) translateY(-30vw) rotate(calc(-1 * var(--a)));font-size:15px}}
 @media(prefers-reduced-motion:reduce){.clock-calendar-mode.clock-calendar-open #workList.clock-calendar-list{animation:none}}
+</style><style id="cat-pocket-watch-visual-css">
+/* Illustrated pocket watch: matching the garden camera and black-cat music box */
+.clock-pocket-wrap{position:relative;width:min(76vw,318px);padding:28px 8px 6px;display:flex;justify-content:center}
+.clock-pocket-loop{position:absolute;top:0;left:50%;transform:translateX(-50%);width:44px;height:40px;border:9px solid #d9b27b;border-radius:50%;box-shadow:inset 0 0 0 2px #8c715b,0 0 0 2px #6d5d58}
+.clock-pocket-chain{position:absolute;top:25px;right:4px;color:#cba36d;font-size:25px;text-shadow:0 2px #75624c}
+.clock-pocket-cat{position:absolute;right:8%;top:19px;width:76px;height:55px;z-index:7;pointer-events:none}
+.clock-pocket-cat svg{width:100%;height:100%}
+.clock-pocket-wrap .clock-face{width:min(69vw,290px);border:12px solid #e7c592;outline:3px solid #675b60;box-shadow:0 7px 16px #23263b50,inset 0 0 0 3px #a8896a,inset 0 0 0 8px #f7ebd5;background:radial-gradient(circle at 42% 36%,#fffaf0,#f0e6d3 74%,#d8c4a4)}
+.clock-pocket-wrap .clock-numeral{font-family:Georgia,serif;color:#625251}
+.clock-pocket-wrap .clock-hand.hour{background:#51485a}
+.clock-pocket-wrap .clock-hand.minute{background:#85705e}
+.clock-calendar-mode .clock-calendar-list{background:linear-gradient(90deg,#d5c9b71c,#fffaf0 20%,#f3e9d8 85%,#c5b69e24),#f3ead9;border:1px solid #c6b498;border-radius:2px}
+.clock-calendar-mode .clock-calendar-month{font-family:'Gowun Batang',serif;font-weight:700}
+.clock-calendar-mode .clock-calendar-cell{border-color:#b6b1b0;background:#fffaf050}
+@media(max-width:600px){.clock-pocket-wrap .clock-numeral{transform:translate(-50%,-50%) rotate(var(--a)) translateY(-29vw) rotate(calc(-1 * var(--a)));font-size:15px}}
 </style></head>
 <body>
 <div id="app">
@@ -1515,18 +1530,21 @@ function openShopMusic(loc){
  $("#locationTitle").textContent=loc.name;
  const stage=document.createElement("div");stage.className="shop-music-stage";
  stage.innerHTML=`<button type="button" class="shop-music-trigger" aria-label="오르골 태엽 감아 악보 펼치기">
- <svg viewBox="0 0 330 245" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
- <path d="M62 104L173 71L285 103L175 141Z" fill="#66748b" stroke="#384b63" stroke-width="3"/>
- <g class="shop-music-lid"><path d="M62 102L171 61L286 101L174 135Z" fill="#b9a88f" stroke="#45546b" stroke-width="3"/><path d="M81 101L171 72L267 102L173 123Z" fill="#e5d8c4" stroke="#6a788b" stroke-width="1.5"/><path d="M120 102L171 85L220 102L172 115Z" fill="#566780" opacity=".9"/><text x="171" y="104" text-anchor="middle" fill="#f4ecdf" font-size="10" letter-spacing="2">MEMORIES</text></g>
- <path d="M61 112L175 150L286 112L284 195L175 227L63 193Z" fill="#a18b73" stroke="#40516b" stroke-width="3"/>
- <path d="M61 112L175 150L175 227L63 193Z" fill="#c4b096" stroke="#40516b" stroke-width="2"/>
- <path d="M175 150L286 112L284 195L175 227Z" fill="#8b806f" stroke="#40516b" stroke-width="2"/>
- <path d="M72 129L165 159L165 210L73 184Z" fill="#e3d5bf" stroke="#8a806f" stroke-width="1.5"/>
- <path d="M187 158L272 130L271 186L187 212Z" fill="#a99a84" stroke="#7a786f" stroke-width="1.5"/>
- <path d="M109 153L126 159L126 179L109 174Z" fill="#53647d"/><circle cx="117" cy="165" r="3" fill="#e6d6b9"/>
- <path d="M283 155L307 155L307 137M307 137L319 137" fill="none" stroke="#4b586d" stroke-width="5" stroke-linecap="round"/>
- <circle cx="320" cy="137" r="7" fill="#b4a58e" stroke="#4b586d" stroke-width="2"/>
- <path d="M90 187L105 192M244 200L260 195" stroke="#45546b" stroke-width="3" opacity=".6"/>
+ <svg viewBox="0 0 330 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+ <defs><linearGradient id="catBox" x2="0" y2="1"><stop stop-color="#fff8e8"/><stop offset="1" stop-color="#d9c9ac"/></linearGradient></defs>
+ <ellipse cx="162" cy="236" rx="120" ry="13" fill="#233047" opacity=".16"/>
+ <g class="shop-music-lid"><rect x="45" y="37" width="236" height="91" rx="23" fill="#f9efdd" stroke="#695d60" stroke-width="4"/><rect x="55" y="47" width="216" height="71" rx="16" fill="#35435f"/><path d="M95 95Q153 52 231 92" fill="none" stroke="#ddbb7c" stroke-width="2" opacity=".65"/><path d="M157 62a19 19 0 1 0 19 29a18 18 0 1 1-19-29" fill="#e9c78e"/><g fill="#e9c78e"><circle cx="89" cy="70" r="3"/><circle cx="233" cy="69" r="3"/><path d="M105 94l3-8 3 8 8 3-8 3-3 8-3-8-8-3z"/></g></g>
+ <rect x="45" y="115" width="236" height="114" rx="21" fill="url(#catBox)" stroke="#665e63" stroke-width="4"/>
+ <rect x="55" y="132" width="216" height="81" rx="13" fill="#f9f1e3" stroke="#d6b37b" stroke-width="4"/>
+ <rect x="88" y="145" width="148" height="55" rx="13" fill="#34435f"/>
+ <path d="M113 186Q141 154 180 181" fill="none" stroke="#e4c18c" stroke-width="3"/>
+ <g fill="#e7c28b"><path d="M125 162l3-7 3 7 7 3-7 3-3 7-3-7-7-3z"/><circle cx="207" cy="161" r="3"/><path d="M201 188a14 14 0 1 1 12-20a12 12 0 1 0-12 20"/></g>
+ <path d="M143 183Q135 176 137 162L144 149L154 158Q165 154 174 159L184 149L189 165Q194 189 177 196L151 196Q141 192 143 183Z" fill="#292b32" stroke="#1c2332" stroke-width="2"/>
+ <path d="M151 180q4 5 8 0m13 0q4 5 8 0" fill="none" stroke="#e7d4c5" stroke-width="2" stroke-linecap="round"/>
+ <path d="M164 185l3 2 3-2" fill="none" stroke="#e7d4c5" stroke-width="1.5"/>
+ <path d="M186 190q17 0 15-14" fill="none" stroke="#292b32" stroke-width="7" stroke-linecap="round"/>
+ <rect x="72" y="219" width="24" height="11" rx="4" fill="#c7a36e"/><rect x="228" y="219" width="24" height="11" rx="4" fill="#c7a36e"/>
+ <path d="M282 166h18m0 0v-18m0 18h15" stroke="#b28d59" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="316" cy="148" r="10" fill="none" stroke="#b28d59" stroke-width="5"/>
  </svg></button><p class="shop-music-hint">태엽을 감으면 오래된 악보가 펼쳐집니다</p>`;
  modal.insertBefore(stage,list);
  const heading=document.createElement("div");heading.className="shop-score-heading";
@@ -1617,7 +1635,7 @@ function openClockDial(loc){
  $("#locationTitle").textContent=loc.name;
  list.className="work-list clock-calendar-list";list.innerHTML="";list.style.display="";
  const stage=document.createElement("div");stage.className="clock-dial-stage";
- stage.innerHTML='<div class="clock-face" role="group" aria-label="시침과 분침을 각각 드래그해 시간을 맞추세요"><div class="clock-hand hour" role="slider" aria-label="시침" tabindex="0"></div><div class="clock-hand minute" role="slider" aria-label="분침" tabindex="0"></div><div class="clock-pin"></div></div><p class="clock-instruction">바늘을 직접 움직여 기억의 시간을 찾아주세요.</p><button class="clock-try" type="button">이 시간의 기억 펼치기</button>';
+ stage.innerHTML='<div class="clock-pocket-wrap"><div class="clock-pocket-loop"></div><div class="clock-pocket-chain">✦</div><div class="clock-pocket-cat" aria-hidden="true"><svg viewBox="0 0 90 65"><path d="M15 37L17 15L33 27Q46 19 59 27L74 15L77 39Q77 58 47 58Q17 58 15 37Z" fill="#30313b" stroke="#20232c" stroke-width="2"/><path d="M27 40q5 5 10 0m17 0q5 5 10 0" stroke="#f4d5bf" stroke-width="2" fill="none"/><path d="M43 45l4 3 4-3" stroke="#f4d5bf" fill="none" stroke-width="2"/></svg></div><div class="clock-face" role="group" aria-label="시침과 분침을 각각 드래그해 시간을 맞추세요"><div class="clock-hand hour" role="slider" aria-label="시침" tabindex="0"></div><div class="clock-hand minute" role="slider" aria-label="분침" tabindex="0"></div><div class="clock-pin"></div></div></div><p class="clock-instruction">시곗바늘을 움직여 기억의 시간을 찾아주세요.</p><button class="clock-try" type="button">이 시간의 기억 펼치기</button>';
  modal.insertBefore(stage,list);
  const face=stage.querySelector(".clock-face");
  for(let n=1;n<=12;n++){const el=document.createElement("span");el.className="clock-numeral";el.textContent=n;el.style.setProperty("--a",n*30+"deg");face.append(el);}
