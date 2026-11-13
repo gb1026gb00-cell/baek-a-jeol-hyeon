@@ -1147,6 +1147,36 @@ button{font:inherit;cursor:pointer}
 @keyframes clockStarFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @media(max-width:600px){.clock-stars-mode .clock-star-scene{width:min(94vw,350px)}.clock-stars-mode .clock-memory-star{width:66px;height:66px}.clock-stars-mode .clock-memory-star span{font-size:28px}.clock-stars-mode .clock-memory-star small{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.clock-stars-mode .clock-memory-star{animation:none}}
+</style><style id="mobile-three-scene-layout-fix">
+/* Clock: compact illustration, both memory stars fully within the scene. */
+.clock-stars-mode .clock-star-scene{width:min(76vw,340px)!important;max-width:340px;margin:0 auto 4px!important}
+.clock-stars-mode .clock-star-watch{width:100%;max-height:330px;object-fit:contain}
+.clock-stars-mode .clock-memory-july{left:2%!important;top:23%!important}
+.clock-stars-mode .clock-memory-november{right:2%!important;bottom:18%!important}
+.clock-stars-mode .clock-memory-star{width:68px;height:68px}
+.clock-stars-mode .clock-memory-star span{font-size:28px}
+.clock-stars-mode .clock-memory-star small{font-size:10px}
+.clock-stars-mode .clock-dial-stage{padding-bottom:8px}
+.clock-stars-mode .clock-instruction{color:#6e5b70!important;font-size:13px}
+/* Garden: align the functional purple shutter with the illustrated purple shutter. */
+.garden-camera-mode .garden-camera-shutter{left:37.2%!important;top:43.3%!important;width:8%!important;min-width:27px;height:auto!important;aspect-ratio:1;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 30%,#e6c4f2,#ae83c8 60%,#765092)!important;box-shadow:0 1px 4px #4a326d77!important}
+.garden-camera-mode .garden-camera-shutter:active{transform:translate(-50%,-50%) scale(.93)}
+/* Music: small unobtrusive video player that remains mounted for continuous playback. */
+#shopPersistentPlayer.shop-player-floating{right:8px!important;left:auto!important;bottom:8px!important;width:145px!important;max-height:160px!important;padding:5px!important;gap:2px!important;border-radius:9px!important}
+#shopPersistentPlayer.shop-player-floating iframe{width:132px!important;height:75px!important;max-width:100%!important}
+#shopPersistentPlayer.shop-player-floating .shop-music-player-label{font-size:9px!important;line-height:1.2!important}
+@media(max-width:600px){
+ .clock-stars-mode .clock-star-scene{width:min(76vw,290px)!important}
+ .clock-stars-mode .clock-star-watch{max-height:290px}
+ .clock-stars-mode .clock-memory-star{width:56px!important;height:56px!important}
+ .clock-stars-mode .clock-memory-star span{font-size:24px!important}
+ .clock-stars-mode .clock-memory-star small{font-size:9px!important}
+ .clock-stars-mode .clock-memory-july{left:0%!important;top:22%!important}
+ .clock-stars-mode .clock-memory-november{right:0%!important;bottom:18%!important}
+ #shopPersistentPlayer.shop-player-floating{right:6px!important;bottom:6px!important;width:116px!important;max-height:120px!important;padding:4px!important}
+ #shopPersistentPlayer.shop-player-floating iframe{width:106px!important;height:60px!important}
+ #shopPersistentPlayer.shop-player-floating .shop-music-player-label{font-size:8px!important}
+}
 </style></head>
 <body>
 <div id="app">
