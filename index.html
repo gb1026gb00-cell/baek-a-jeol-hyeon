@@ -1363,6 +1363,7 @@ function stopShopMusic(){
 }
 function openShopMusic(loc){
  stopShopMusic();
+ document.querySelector("#locationOverlay .shop-music-player")?.remove();
  currentLocation=loc;
  const modal=$("#locationOverlay .location-modal"),list=$("#workList");
  modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open","fx-garden","fx-school","fx-cafe","fx-bridge","shop-open");
