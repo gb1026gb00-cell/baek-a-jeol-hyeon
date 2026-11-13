@@ -1672,6 +1672,11 @@ function openClockDial(loc){
 }
 
 function openLocation(loc){
+ // Remove the previous location's interactive stage before rendering another.
+ // In particular, the clock stage must never remain behind the garden camera.
+ const previousModal=$("#locationOverlay .location-modal");
+ ["clock-dial-stage","garden-camera-stage","school-diary-stage","bridge-boat-stage","shop-music-stage","shop-music-player","cafe-cake-stage","fx-scene"].forEach(c=>previousModal.querySelectorAll("."+c).forEach(el=>el.remove()));
+ previousModal.classList.remove("clock-calendar-mode","clock-calendar-open","clock-chat-open");
  if(loc.id==="clock")return openClockDial(loc);
  if(loc.id==="school")return openSchoolDiary(loc);
  if(loc.id==="bridge")return openBridgeBoat(loc);
