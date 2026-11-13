@@ -1108,7 +1108,7 @@ button{font:inherit;cursor:pointer}
 /* Never allow a clock to render outside the clock-tower location. */
 #locationOverlay .location-modal:not(.clock-calendar-mode) .clock-dial-stage,
 #locationOverlay .location-modal:not(.clock-calendar-mode) .clock-pocket-wrap{display:none!important}
-</style></head>
+</style><style id="cafe-photo-cake-css">.cafe-cake-trigger{width:min(88%,420px)}.cafe-cake-photo{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:18px;box-shadow:0 10px 22px #30212b45}.cafe-cake-trigger:hover .cafe-cake-photo{filter:brightness(1.04)}</style></head>
 <body>
 <div id="app">
   <section id="introScreen" class="screen video-screen active">
@@ -1597,22 +1597,7 @@ function openCafeCake(loc){
  list.className="work-list cafe-receipt-list";list.innerHTML="";list.style.display="";
  $("#locationTitle").textContent=loc.name;
  const stage=document.createElement("div");stage.className="cafe-cake-stage";
- stage.innerHTML=`<button class="cafe-cake-trigger" type="button" aria-label="딸기 생크림 케이크를 눌러 영수증 꺼내기"><svg viewBox="0 0 340 265" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
- <ellipse cx="171" cy="233" rx="146" ry="21" fill="#c8b8b0" opacity=".45"/>
- <ellipse cx="171" cy="217" rx="147" ry="28" fill="#f3ece8" stroke="#b8a7a4" stroke-width="3"/>
- <ellipse cx="171" cy="209" rx="128" ry="18" fill="#e7dcd7"/>
- <path d="M67 122L247 100L287 168L157 215L67 182Z" fill="#f8f1e8" stroke="#bcaca5" stroke-width="2.4"/>
- <path d="M67 122L247 100L287 168L157 189Z" fill="#fdf9f0" stroke="#cdbdb3" stroke-width="2"/>
- <path d="M67 145L265 130L274 145L153 202L67 166Z" fill="#d95c68" opacity=".68"/>
- <path d="M67 164L274 145L283 161L156 212L67 180Z" fill="#fff9f1"/>
- <path d="M67 122Q77 110 94 118Q110 104 127 113Q142 98 158 109Q176 95 191 106Q212 91 228 102Q246 95 254 112L287 168Q275 161 264 173Q249 169 240 183Q226 180 214 192Q200 188 188 204Q171 201 157 215L67 182Z" fill="none" stroke="#fffaf4" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/>
- <path d="M67 122L247 100L287 168L157 189Z" fill="#f9f5ec" opacity=".55"/>
- <path d="M85 116Q93 99 109 112Q117 91 136 104Q147 85 164 101Q180 84 194 99Q209 82 225 100Q242 86 252 107" fill="none" stroke="#fffdf6" stroke-width="17" stroke-linecap="round"/>
- <g fill="#c94757" stroke="#a63b4b" stroke-width="2"><path d="M100 92Q86 79 95 62Q111 51 123 68Q130 84 113 98Z"/><path d="M166 80Q151 67 161 49Q177 40 188 56Q196 74 179 84Z"/><path d="M228 91Q212 78 223 61Q238 52 251 68Q255 84 240 96Z"/></g>
- <g fill="#69836a"><path d="M105 65L96 55L111 60L119 52L116 67Z"/><path d="M171 52L161 42L176 46L184 39L181 55Z"/><path d="M233 64L225 53L239 58L248 51L244 67Z"/></g>
- <g fill="#f9c7bd" opacity=".85"><circle cx="103" cy="76" r="3"/><circle cx="170" cy="63" r="3"/><circle cx="231" cy="75" r="3"/></g>
- <path d="M70 123L156 190L156 214L68 182Z" fill="#f8f1e8" opacity=".72"/>
- </svg></button><p class="cafe-cake-hint">🍓 딸기 케이크를 누르면 영수증이 나옵니다</p>`;
+ stage.innerHTML=`<button class="cafe-cake-trigger" type="button" aria-label="딸기 생크림 케이크를 눌러 영수증 꺼내기"><img class="cafe-cake-photo" alt="실사 딸기 생크림 조각케이크" src="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=700&q=85"></button><p class="cafe-cake-hint">🍓 딸기 케이크를 누르면 영수증이 나옵니다</p>`;
  modal.insertBefore(stage,list);
  const heading=document.createElement("div");heading.className="cafe-receipt-heading";
  heading.innerHTML="작은 카페<small>STRAWBERRY CAKE & STORIES</small>";list.append(heading);
