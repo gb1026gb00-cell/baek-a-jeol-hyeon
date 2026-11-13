@@ -1069,6 +1069,26 @@ button{font:inherit;cursor:pointer}
 .shop-score-list .work-choice:hover{background:#ffffff40!important}
 .shop-score-list .shop-score-footnote{font:italic 11px Georgia,serif;color:#65748a;text-align:center;padding-top:14px}
 @media(max-width:600px){.shop-music-mode #workList.shop-score-list{padding:20px 12px 28px}}
+</style><style id="clock-dial-calendar-css">
+.clock-dial-stage{display:flex;flex-direction:column;align-items:center;gap:12px;padding:12px 0}
+.clock-face{position:relative;width:min(72vw,300px);aspect-ratio:1;border-radius:50%;border:13px ridge #ac8a58;background:radial-gradient(circle,#fff9e9 0%,#eee2c8 80%,#b9a17e 100%);box-shadow:0 6px 18px #32291e55,inset 0 0 0 3px #5c5148,inset 0 0 0 9px #e8d8b6;touch-action:none;user-select:none}
+.clock-numeral{position:absolute;left:50%;top:50%;font:19px Georgia,serif;color:#51473d;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-116px) rotate(calc(-1 * var(--a)));pointer-events:none}
+.clock-hand{position:absolute;left:50%;top:50%;width:11px;height:31%;border-radius:8px 8px 3px 3px;background:#4c3c35;transform-origin:50% 92%;transform:translate(-50%,-92%) rotate(var(--angle));cursor:grab;touch-action:none;z-index:3;box-shadow:1px 1px 2px #0004}
+.clock-hand.minute{height:41%;width:6px;background:#71604d;z-index:4}
+.clock-pin{position:absolute;left:50%;top:50%;width:17px;height:17px;border-radius:50%;background:#c2a26e;border:3px solid #65503d;transform:translate(-50%,-50%);z-index:5;pointer-events:none}
+.clock-instruction{font:13px 'Gowun Batang',serif;color:#eee7da;text-align:center}
+.clock-try{font:12px 'Gowun Batang',serif;color:#eee7da;border:1px solid #aaa08d;background:#4b5366;padding:9px 17px;cursor:pointer}
+.clock-calendar-list{display:none!important;flex-direction:column;gap:10px;margin:6px auto 15px;width:min(93%,410px);background:#eee8dc;padding:22px 18px 27px;box-shadow:3px 8px 15px #242b3950;transform-origin:top}
+.clock-calendar-mode.clock-calendar-open #workList.clock-calendar-list{display:flex!important;animation:clockPageDrop .65s ease-out both}
+@keyframes clockPageDrop{from{opacity:0;transform:rotateX(-65deg) scaleY(.3)}to{opacity:1;transform:rotateX(0) scaleY(1)}}
+.clock-calendar-month{text-align:center;font:30px Georgia,serif;color:#374761;letter-spacing:.1em}
+.clock-calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:4px 0 12px}
+.clock-calendar-cell{aspect-ratio:1;border:1px solid #a7adba;background:#f8f4ea70}
+.clock-calendar-story{display:block;width:100%;border:1px solid #a5a9b0;background:#faf6ed;padding:13px;color:#35435a;text-align:left;cursor:pointer;font:16px 'Gowun Batang',serif}
+.clock-calendar-story small{display:block;font-size:11px;color:#798293;margin-bottom:5px}
+.clock-calendar-note{font:11px 'Gowun Batang',serif;color:#68748a;text-align:center}
+@media(max-width:600px){.clock-numeral{transform:translate(-50%,-50%) rotate(var(--a)) translateY(-30vw) rotate(calc(-1 * var(--a)));font-size:15px}}
+@media(prefers-reduced-motion:reduce){.clock-calendar-mode.clock-calendar-open #workList.clock-calendar-list{animation:none}}
 </style></head>
 <body>
 <div id="app">
@@ -1587,7 +1607,54 @@ function openCafeCake(loc){
  $("#locationOverlay").classList.add("show");
 }
 
+
+function openClockDial(loc){
+ currentLocation=loc;
+ const modal=$("#locationOverlay .location-modal"),list=$("#workList");
+ modal.classList.remove("garden-camera-mode","school-diary-mode","bridge-boat-mode","bridge-open","shop-music-mode","shop-open","cafe-cake-mode","cafe-receipt-open","clock-calendar-open");
+ modal.classList.add("clock-calendar-mode");
+ ["garden-camera-stage","school-diary-stage","bridge-boat-stage","shop-music-stage","shop-music-player","cafe-cake-stage","clock-dial-stage","fx-scene"].forEach(c=>modal.querySelector("."+c)?.remove());
+ $("#locationTitle").textContent=loc.name;
+ list.className="work-list clock-calendar-list";list.innerHTML="";list.style.display="";
+ const stage=document.createElement("div");stage.className="clock-dial-stage";
+ stage.innerHTML='<div class="clock-face" role="group" aria-label="시침과 분침을 각각 드래그해 시간을 맞추세요"><div class="clock-hand hour" role="slider" aria-label="시침" tabindex="0"></div><div class="clock-hand minute" role="slider" aria-label="분침" tabindex="0"></div><div class="clock-pin"></div></div><p class="clock-instruction">바늘을 직접 움직여 기억의 시간을 찾아주세요.</p><button class="clock-try" type="button">이 시간의 기억 펼치기</button>';
+ modal.insertBefore(stage,list);
+ const face=stage.querySelector(".clock-face");
+ for(let n=1;n<=12;n++){const el=document.createElement("span");el.className="clock-numeral";el.textContent=n;el.style.setProperty("--a",n*30+"deg");face.append(el);}
+ let hour=0,minute=0;
+ const hourHand=stage.querySelector(".clock-hand.hour"),minuteHand=stage.querySelector(".clock-hand.minute");
+ function draw(){hourHand.style.setProperty("--angle",hour+"deg");minuteHand.style.setProperty("--angle",minute+"deg");}
+ function move(which,e){const r=face.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;const angle=(Math.atan2(e.clientX-cx,-(e.clientY-cy))*180/Math.PI+360)%360;if(which==="hour")hour=angle;else minute=angle;draw();}
+ [hourHand,minuteHand].forEach((hand,i)=>{
+  const which=i===0?"hour":"minute";
+  hand.addEventListener("pointerdown",e=>{e.preventDefault();hand.setPointerCapture(e.pointerId);move(which,e);});
+  hand.addEventListener("pointermove",e=>{if(hand.hasPointerCapture(e.pointerId))move(which,e);});
+  hand.addEventListener("keydown",e=>{if(e.key!=="ArrowLeft"&&e.key!=="ArrowRight")return;e.preventDefault();const delta=e.key==="ArrowRight"?6:-6;if(which==="hour")hour=(hour+delta+360)%360;else minute=(minute+delta+360)%360;draw();});
+ });
+ // Angles are evaluated independently so the hands can be adjusted comfortably.
+ const near=(a,b,tolerance)=>Math.abs(((a-b+540)%360)-180)<=tolerance;
+ const stories=STORIES.filter(st=>st.location==="clock");
+ stage.querySelector(".clock-try").onclick=()=>{
+  let month,story;
+  if(near(hour,215,23)&&near(minute,60,25)){month="11월";story=stories[0];}
+  else if(near(hour,343,23)&&near(minute,156,25)){month="7월";story=stories[1];}
+  else {stage.querySelector(".clock-instruction").textContent="아직 잠겨 있어요. 7시 10분 또는 11시 26분 근처로 맞춰 보세요.";return;}
+  list.innerHTML="";
+  const title=document.createElement("div");title.className="clock-calendar-month";title.textContent=month;list.append(title);
+  const grid=document.createElement("div");grid.className="clock-calendar-grid";grid.setAttribute("aria-label",month+" 날짜 없는 달력");
+  for(let i=0;i<35;i++){const cell=document.createElement("div");cell.className="clock-calendar-cell";grid.append(cell);}list.append(grid);
+  if(story){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";b.innerHTML="<small>기억의 조각 · "+month+"</small>";const name=document.createElement("strong");name.textContent=story.title;b.append(name);b.onclick=()=>openStory(story);list.append(b);}
+  // Preserve access to the existing third clock-tower story.
+  if(stories[2]){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";const label=document.createElement("small");label.textContent="시계탑의 또 다른 이야기";b.append(label);const name=document.createElement("strong");name.textContent=stories[2].title;b.append(name);b.onclick=()=>openStory(stories[2]);list.append(b);}
+  const note=document.createElement("div");note.className="clock-calendar-note";note.textContent="날짜 없이 남겨 둔 우리의 달력";list.append(note);
+  modal.classList.remove("clock-calendar-open");void list.offsetWidth;modal.classList.add("clock-calendar-open");
+  stage.querySelector(".clock-instruction").textContent=month+"의 기억이 펼쳐졌어요.";
+ };
+ draw();$("#locationOverlay").classList.add("show");
+}
+
 function openLocation(loc){
+ if(loc.id==="clock")return openClockDial(loc);
  if(loc.id==="school")return openSchoolDiary(loc);
  if(loc.id==="bridge")return openBridgeBoat(loc);
  if(loc.id==="shop")return openShopMusic(loc);
