@@ -1227,6 +1227,18 @@ button{font:inherit;cursor:pointer}
 @keyframes seasonTurnPage{0%{opacity:1;transform:rotateY(0)}100%{opacity:0;transform:rotateY(-55deg) translateX(-18px)}}
 @media(max-width:430px){.season-toc-item{min-height:124px}.season-toc-symbol{font-size:36px}.season-toc-grid{gap:9px}.season-toc-page{padding:18px}}
 @media(prefers-reduced-motion:reduce){.season-toc-leaving .season-toc-page{animation:none}}
+</style><style id="season-map-pointer-style">
+#mapScreen .season-map-pointer{position:absolute;z-index:20;top:7.6%;right:3.5%;display:flex;align-items:center;gap:5px;min-height:37px;padding:4px 10px 4px 7px;border:1px solid #c7a878;border-radius:999px;background:#fff6e5ed;color:#654a35;box-shadow:0 3px 10px #46312045;cursor:pointer;font-family:'Gowun Batang',serif;touch-action:manipulation;transition:transform .2s}
+#mapScreen .season-map-pointer:hover{transform:translateY(-2px)}
+#mapScreen .season-map-pointer:focus-visible{outline:3px solid #7e5c8b;outline-offset:2px}
+#mapScreen .season-pointer-icon{font-size:22px;line-height:1.1}
+#mapScreen .season-pointer-label{font-size:12px;font-weight:700;white-space:nowrap}
+#mapScreen .season-map-pointer[data-season]{background:#fff8ebf5}
+#mapScreen .season-map-pointer[data-season="봄"]{border-color:#d4a66d}
+#mapScreen .season-map-pointer[data-season="여름"]{border-color:#9da768}
+#mapScreen .season-map-pointer[data-season="가을"]{border-color:#c38e5c}
+#mapScreen .season-map-pointer[data-season="겨울"]{border-color:#9eb8c8}
+@media(max-width:500px){#mapScreen .season-map-pointer{top:7%;right:2.5%;min-height:33px;padding:4px 8px}#mapScreen .season-pointer-icon{font-size:19px}#mapScreen .season-pointer-label{font-size:11px}}
 </style></head>
 <body>
 <div id="app">
@@ -1254,7 +1266,7 @@ button{font:inherit;cursor:pointer}
 
     <div class="map-shell">
       <img class="map-image" src="assets/9b17f2b7b336.webp" alt="벚꽃 마을 지도">
-      <div class="map-heading">A LITTLE JOURNEY IN THE ALBUM</div>
+      <div class="map-heading">A LITTLE JOURNEY IN THE ALBUM</div><button id="seasonMapPointer" class="season-map-pointer" type="button" aria-label="계절 선택 목차 열기"><span class="season-pointer-icon" aria-hidden="true">☞</span><span class="season-pointer-label">계절 선택</span></button>
       <div id="pins"></div><div id="mapCats" aria-hidden="true"></div>
       <div id="progress">읽은 이야기 0 / 15</div>
       <button class="inventory-toggle" id="openInventory" aria-label="수집한 아이템 보관함 열기">🗝 <span id="inventoryCount">0 / 15</span></button>
@@ -1418,12 +1430,29 @@ function enterMap(){
 }
 function closeSeasonToc(season){
  const toc=document.querySelector("#seasonToc");if(!toc)return;
+ const selected={봄:["🌼","봄"],여름:["🌻","여름"],가을:["🍁","가을"],겨울:["❄️","겨울"]}[season];
+ const pointer=document.querySelector("#seasonMapPointer");
+ if(selected && pointer){
+  pointer.querySelector(".season-pointer-icon").textContent=selected[0];
+  pointer.querySelector(".season-pointer-label").textContent=selected[1];
+  pointer.dataset.season=season;
+  pointer.setAttribute("aria-label",season+" 선택됨 · 다른 계절 선택하기");
+ }
  toc.classList.add("season-toc-leaving");
  const label=toc.querySelector(".season-toc-transition");
  label.textContent=season+"의 페이지를 넘깁니다…";
  window.setTimeout(()=>{toc.classList.remove("season-toc-open","season-toc-leaving");toc.setAttribute("aria-hidden","true");},650);
 }
 document.querySelectorAll("#seasonToc [data-season]").forEach(btn=>btn.addEventListener("click",()=>closeSeasonToc(btn.dataset.season)));
+document.querySelector("#seasonMapPointer")?.addEventListener("click",()=>{
+ const toc=document.querySelector("#seasonToc");if(!toc)return;
+ toc.classList.remove("season-toc-leaving");
+ toc.classList.add("season-toc-open");
+ toc.setAttribute("aria-hidden","false");
+ const hint=toc.querySelector(".season-toc-transition");
+ if(hint)hint.textContent="다른 계절을 골라 주세요";
+});
+
 
 function renderMap(){
   $("#pins").innerHTML="";
