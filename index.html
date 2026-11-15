@@ -1247,6 +1247,20 @@ button{font:inherit;cursor:pointer}
 #mapScreen .map-daylight-layer[data-phase="night"]{background:linear-gradient(140deg,rgba(21,34,81,.37),rgba(35,43,90,.34) 65%,rgba(23,32,71,.42));}
 #mapScreen #pins,#mapScreen #mapCats,#mapScreen .map-heading,#mapScreen #progress,#mapScreen .inventory-toggle,#mapScreen .season-map-pointer{z-index:3;}
 @media(prefers-reduced-motion:reduce){#mapScreen .map-daylight-layer{transition:none}}
+</style><style id="album-season-ambient-effects">
+/* Purely decorative layers: no new buildings, clickable objects, or story logic. */
+#mapScreen .map-night-glow{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 7s ease;background:radial-gradient(ellipse 18% 12% at 29% 49%,rgba(255,212,139,.19),transparent 95%),radial-gradient(ellipse 16% 11% at 72% 65%,rgba(255,210,137,.15),transparent 95%),radial-gradient(ellipse 22% 13% at 51% 78%,rgba(255,221,169,.10),transparent 95%);mix-blend-mode:screen}
+#mapScreen[data-daylight="night"] .map-night-glow{opacity:1}
+#mapScreen .map-season-wind{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2}
+#mapScreen .map-wind-piece{position:absolute;left:-12%;top:var(--wind-y);font-size:clamp(10px,1.7vw,19px);line-height:1;color:#fff0dfb8;text-shadow:0 1px 3px #65463155;opacity:0;animation:mapSeasonBreeze var(--wind-duration) linear var(--wind-delay) both}
+#mapScreen[data-season="여름"] .map-wind-piece{color:#b6d5a5}
+#mapScreen[data-season="가을"] .map-wind-piece{color:#c98450}
+#mapScreen[data-season="겨울"] .map-wind-piece{color:#f2f7ff}
+@keyframes mapSeasonBreeze{0%{transform:translate(0,0) rotate(-25deg);opacity:0}15%{opacity:.75}85%{opacity:.65}100%{transform:translate(115vw,-65px) rotate(160deg);opacity:0}}
+#mapScreen .map-season-fade{position:absolute;inset:0;z-index:11;pointer-events:none;opacity:0;background:rgba(255,247,235,.76)}
+#mapScreen .map-season-fade.season-fade-active{animation:mapSeasonDissolve 1.6s ease-in-out both}
+@keyframes mapSeasonDissolve{0%,100%{opacity:0}40%{opacity:.68}60%{opacity:.68}}
+@media(prefers-reduced-motion:reduce){#mapScreen .map-night-glow{transition:none}#mapScreen .map-season-fade{animation:none!important}#mapScreen .map-wind-piece{display:none}}
 </style></head>
 <body>
 <div id="app">
@@ -1275,6 +1289,9 @@ button{font:inherit;cursor:pointer}
     <div class="map-shell">
       <img class="map-image" src="assets/9b17f2b7b336.webp" alt="벚꽃 마을 지도">
       <div id="mapDaylightLayer" class="map-daylight-layer" aria-hidden="true"></div>
+      <div id="mapNightGlow" class="map-night-glow" aria-hidden="true"></div>
+      <div id="mapSeasonWind" class="map-season-wind" aria-hidden="true"></div>
+      <div id="mapSeasonFade" class="map-season-fade" aria-hidden="true"></div>
       <div class="map-heading">A LITTLE JOURNEY IN THE ALBUM</div><button id="seasonMapPointer" class="season-map-pointer" type="button" aria-label="계절 선택 목차 열기"><span class="season-pointer-icon" aria-hidden="true">☞</span><span class="season-pointer-label">계절 선택</span></button>
       <div id="pins"></div><div id="mapCats" aria-hidden="true"></div>
       <div id="progress">읽은 이야기 0 / 15</div>
@@ -1455,9 +1472,47 @@ function enterMap(){
  const toc=document.querySelector("#seasonToc");
  if(toc && !toc.dataset.seen){toc.dataset.seen="1";toc.classList.add("season-toc-open");toc.setAttribute("aria-hidden","false");}
 }
+// Atmosphere-only additions; independent of stories, inventory, and endings.
+const seasonAtmosphere={season:null,windTimer:null,fadeTimer:null};
+function blowSeasonWind(){
+ const stage=document.querySelector("#mapSeasonWind");
+ if(!stage||!seasonAtmosphere.season||!document.querySelector("#mapScreen")?.classList.contains("active"))return;
+ if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ const marks={봄:["✿","❀"],여름:["❧","🍃"],가을:["🍂","🍁"],겨울:["❄","✧"]}[seasonAtmosphere.season];
+ if(!marks)return;
+ for(let i=0;i<4;i++){
+  const p=document.createElement("span");
+  p.className="map-wind-piece";
+  p.textContent=marks[i%marks.length];
+  p.style.setProperty("--wind-y",(18+Math.random()*60)+"%");
+  p.style.setProperty("--wind-delay",(i*.55)+"s");
+  p.style.setProperty("--wind-duration",(6+Math.random()*2)+"s");
+  stage.appendChild(p);
+  p.addEventListener("animationend",()=>p.remove(),{once:true});
+ }
+}
+function setSeasonAtmosphere(season){
+ if(!["봄","여름","가을","겨울"].includes(season))return;
+ const changed=seasonAtmosphere.season!==null&&seasonAtmosphere.season!==season;
+ seasonAtmosphere.season=season;
+ const map=document.querySelector("#mapScreen");
+ if(map)map.dataset.season=season;
+ const fade=document.querySelector("#mapSeasonFade");
+ if(fade&&changed&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+  fade.classList.remove("season-fade-active");
+  void fade.offsetWidth;
+  fade.classList.add("season-fade-active");
+  window.clearTimeout(seasonAtmosphere.fadeTimer);
+  seasonAtmosphere.fadeTimer=window.setTimeout(()=>fade.classList.remove("season-fade-active"),1700);
+ }
+ if(seasonAtmosphere.windTimer===null){
+  seasonAtmosphere.windTimer=window.setInterval(blowSeasonWind,45000);
+ }
+}
 function closeSeasonToc(season){
  const toc=document.querySelector("#seasonToc");if(!toc)return;
  startAlbumDaylight();
+ setSeasonAtmosphere(season);
  const selected={봄:["🌼","봄"],여름:["🌻","여름"],가을:["🍁","가을"],겨울:["❄️","겨울"]}[season];
  const pointer=document.querySelector("#seasonMapPointer");
  if(selected && pointer){
