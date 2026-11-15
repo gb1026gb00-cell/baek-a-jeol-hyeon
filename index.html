@@ -1239,6 +1239,14 @@ button{font:inherit;cursor:pointer}
 #mapScreen .season-map-pointer[data-season="가을"]{border-color:#c38e5c}
 #mapScreen .season-map-pointer[data-season="겨울"]{border-color:#9eb8c8}
 @media(max-width:500px){#mapScreen .season-map-pointer{top:7%;right:2.5%;min-height:33px;padding:4px 8px}#mapScreen .season-pointer-icon{font-size:19px}#mapScreen .season-pointer-label{font-size:11px}}
+</style><style id="album-daylight-lighting-only">
+/* Map atmosphere only: no buildings, graphics, or overlays intercepting interaction. */
+#mapScreen .map-daylight-layer{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:1;transition:background 7s ease,opacity 7s ease;background:linear-gradient(145deg,rgba(255,231,186,.13),rgba(255,248,220,.04) 60%,rgba(247,207,158,.08));}
+#mapScreen .map-daylight-layer[data-phase="morning"]{background:linear-gradient(145deg,rgba(255,234,189,.15),rgba(255,248,220,.05) 60%,rgba(248,220,181,.07));}
+#mapScreen .map-daylight-layer[data-phase="afternoon"]{background:linear-gradient(125deg,rgba(255,190,113,.19),rgba(242,139,110,.17) 65%,rgba(176,98,104,.12));}
+#mapScreen .map-daylight-layer[data-phase="night"]{background:linear-gradient(140deg,rgba(21,34,81,.37),rgba(35,43,90,.34) 65%,rgba(23,32,71,.42));}
+#mapScreen #pins,#mapScreen #mapCats,#mapScreen .map-heading,#mapScreen #progress,#mapScreen .inventory-toggle,#mapScreen .season-map-pointer{z-index:3;}
+@media(prefers-reduced-motion:reduce){#mapScreen .map-daylight-layer{transition:none}}
 </style></head>
 <body>
 <div id="app">
@@ -1266,6 +1274,7 @@ button{font:inherit;cursor:pointer}
 
     <div class="map-shell">
       <img class="map-image" src="assets/9b17f2b7b336.webp" alt="벚꽃 마을 지도">
+      <div id="mapDaylightLayer" class="map-daylight-layer" aria-hidden="true"></div>
       <div class="map-heading">A LITTLE JOURNEY IN THE ALBUM</div><button id="seasonMapPointer" class="season-map-pointer" type="button" aria-label="계절 선택 목차 열기"><span class="season-pointer-icon" aria-hidden="true">☞</span><span class="season-pointer-label">계절 선택</span></button>
       <div id="pins"></div><div id="mapCats" aria-hidden="true"></div>
       <div id="progress">읽은 이야기 0 / 15</div>
@@ -1423,6 +1432,24 @@ $("#startButton").addEventListener("click",()=>{
   $("#startButton").classList.remove("show");
   playVideo($("#subVideo"),"assets/8828e9172bce.mp4",()=>enterMap());
 });
+// One fictional day lasts 12 minutes. Only a translucent lighting overlay changes.
+const albumDaylight={startedAt:null,phase:null,timer:null};
+function updateAlbumDaylight(){
+ if(albumDaylight.startedAt===null)return;
+ const elapsed=(Date.now()-albumDaylight.startedAt)%(12*60*1000);
+ const phase=elapsed<4*60*1000?"morning":elapsed<8*60*1000?"afternoon":"night";
+ if(phase===albumDaylight.phase)return;
+ albumDaylight.phase=phase;
+ const layer=document.querySelector("#mapDaylightLayer");
+ if(layer)layer.dataset.phase=phase;
+ const map=document.querySelector("#mapScreen");
+ if(map)map.dataset.daylight=phase;
+}
+function startAlbumDaylight(){
+ if(albumDaylight.startedAt===null)albumDaylight.startedAt=Date.now();
+ updateAlbumDaylight();
+ if(albumDaylight.timer===null)albumDaylight.timer=window.setInterval(updateAlbumDaylight,10000);
+}
 function enterMap(){
  show("mapScreen");renderMap();startMapCats();
  const toc=document.querySelector("#seasonToc");
@@ -1430,6 +1457,7 @@ function enterMap(){
 }
 function closeSeasonToc(season){
  const toc=document.querySelector("#seasonToc");if(!toc)return;
+ startAlbumDaylight();
  const selected={봄:["🌼","봄"],여름:["🌻","여름"],가을:["🍁","가을"],겨울:["❄️","겨울"]}[season];
  const pointer=document.querySelector("#seasonMapPointer");
  if(selected && pointer){
