@@ -1812,7 +1812,9 @@ function clearClockFromOtherLocations(){
  modal.querySelectorAll(".clock-dial-stage,.clock-pocket-wrap").forEach(el=>el.remove());
  modal.classList.remove("clock-calendar-mode","clock-calendar-open","clock-chat-open");
 }
+let gardenPhotosDeveloped=false;
 function openLocation(loc){
+ if(loc.id!=="garden")gardenPhotosDeveloped=false;
  // Remove the previous location's interactive stage before rendering another.
  // In particular, the clock stage must never remain behind the garden camera.
  const previousModal=$("#locationOverlay .location-modal");
@@ -1849,10 +1851,15 @@ function openLocation(loc){
   b.onclick=()=>openStory(st);list.append(b);
  });
  scene.querySelector(".garden-camera-shutter").onclick=()=>{
+  gardenPhotosDeveloped=true;
   const flash=scene.querySelector(".garden-camera-flash");flash.classList.remove("fire");void flash.offsetWidth;flash.classList.add("fire");
   list.classList.remove("revealed");void list.offsetWidth;list.classList.add("revealed");
   scene.querySelector(".garden-camera-hint").textContent=`✿ ${works.length}장의 추억이 인화되었어요 · 사진을 눌러 읽어주세요 ✿`;
  };
+ if(gardenPhotosDeveloped){
+  list.classList.add("revealed");
+  scene.querySelector(".garden-camera-hint").textContent=`✿ ${works.length}장의 추억이 인화되어 있어요 · 다음 사진을 눌러 읽어주세요 ✿`;
+ }
  $("#locationOverlay").classList.add("show");
 }
 function openStory(st){
@@ -1872,7 +1879,7 @@ function openStory(st){
   $("#locationOverlay").classList.remove("show");
   $("#storyOverlay").classList.add("show");
 }
-$("#closeLocation").onclick=()=>{stopShopMusic();$("#locationOverlay").classList.remove("show");};
+$("#closeLocation").onclick=()=>{gardenPhotosDeveloped=false;stopShopMusic();$("#locationOverlay").classList.remove("show");};
 $("#backToLocation").onclick=()=>{
   $("#storyOverlay").classList.remove("show");
   if(currentLocation)openLocation(currentLocation);
