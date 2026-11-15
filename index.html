@@ -1208,6 +1208,25 @@ button{font:inherit;cursor:pointer}
  #shopPersistentPlayer.shop-player-floating{width:218px!important;right:9px!important;bottom:9px!important;padding:6px!important}
  #shopPersistentPlayer.shop-player-floating iframe{width:202px!important;height:152px!important;min-height:152px!important}
 }
+</style><style id="season-table-of-contents-style">
+.season-toc{position:fixed;inset:0;z-index:11000;display:none;align-items:center;justify-content:center;padding:16px;background:#241a17f5;overflow-y:auto}
+.season-toc.season-toc-open{display:flex}
+.season-toc-page{width:min(94vw,540px);max-height:calc(100svh - 32px);overflow-y:auto;position:relative;padding:clamp(19px,4vw,34px);border:7px double #b99a6b;border-radius:7px;background:linear-gradient(135deg,#fffaf0,#f7e9d4 65%,#f2dfc8);box-shadow:0 20px 55px #100d0b99;color:#514033;text-align:center;font-family:'Gowun Batang',serif}
+.season-toc-kicker{font-size:11px;letter-spacing:.15em;color:#a28766}
+.season-toc-page h2{margin:8px 0 3px;font-size:clamp(27px,6vw,39px);font-weight:700;letter-spacing:.12em}
+.season-toc-sub{margin:0 0 18px;font-size:13px;color:#98795d}
+.season-toc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.season-toc-item{min-width:0;min-height:146px;padding:12px 6px;border:1px solid #d9c4a4;border-radius:8px;background:#fff9ed;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font:inherit;color:#554639;cursor:pointer;box-shadow:0 3px 9px #4a342014;transition:transform .2s,box-shadow .2s}
+.season-toc-item:hover,.season-toc-item:focus-visible{transform:translateY(-3px);box-shadow:0 7px 16px #4a342030;outline-color:#b28e60}
+.season-toc-symbol{font-size:46px;line-height:1.4;filter:drop-shadow(0 3px 3px #725f4630)}
+.season-toc-item strong{font-size:18px}.season-toc-item small{font-size:11px;color:#977f67}
+.season-toc-item.spring{background:#fff2f1}.season-toc-item.summer{background:#eff6ed}.season-toc-item.autumn{background:#fff3e1}.season-toc-item.winter{background:#f0f5f8}
+.season-toc-transition{font-size:13px;min-height:20px;margin:17px 0 6px;color:#97745b}
+.season-toc-footer{font-size:11px;color:#a38b74;border-top:1px solid #d7c4a9;padding-top:13px}
+.season-toc-leaving .season-toc-page{animation:seasonTurnPage .65s ease-in forwards}
+@keyframes seasonTurnPage{0%{opacity:1;transform:rotateY(0)}100%{opacity:0;transform:rotateY(-55deg) translateX(-18px)}}
+@media(max-width:430px){.season-toc-item{min-height:124px}.season-toc-symbol{font-size:36px}.season-toc-grid{gap:9px}.season-toc-page{padding:18px}}
+@media(prefers-reduced-motion:reduce){.season-toc-leaving .season-toc-page{animation:none}}
 </style></head>
 <body>
 <div id="app">
@@ -1218,7 +1237,21 @@ button{font:inherit;cursor:pointer}
   </section>
   <section id="subScreen" class="screen video-screen"><video id="subVideo" playsinline muted preload="auto"></video></section>
   <section id="openScreen" class="screen video-screen"><video id="openVideo" playsinline muted preload="auto"></video></section>
-  <section id="mapScreen" class="screen">
+  <section id="mapScreen" class="screen"><div id="seasonToc" class="season-toc" aria-hidden="true" role="dialog" aria-label="백아절현 사계절 목차">
+ <div class="season-toc-page">
+  <div class="season-toc-kicker">伯牙絶絃 · A LITTLE JOURNEY</div>
+  <h2>四季目錄</h2><p class="season-toc-sub">우리의 계절을 넘기는 방법</p>
+  <div class="season-toc-grid">
+   <button type="button" data-season="봄" class="season-toc-item spring"><span class="season-toc-symbol">🌸</span><strong>春 · 봄</strong><small>꽃이 피던 날</small></button>
+   <button type="button" data-season="여름" class="season-toc-item summer"><span class="season-toc-symbol">🌿</span><strong>夏 · 여름</strong><small>찬란했던 순간</small></button>
+   <button type="button" data-season="가을" class="season-toc-item autumn"><span class="season-toc-symbol">🍁</span><strong>秋 · 가을</strong><small>물들어 가는 마음</small></button>
+   <button type="button" data-season="겨울" class="season-toc-item winter"><span class="season-toc-symbol">❄️</span><strong>冬 · 겨울</strong><small>끝나지 않는 계절</small></button>
+  </div>
+  <p class="season-toc-transition" aria-live="polite">계절 하나를 눌러 첫 장을 넘겨 주세요</p>
+  <div class="season-toc-footer">계절을 지나, 우리의 이야기가 있는 곳으로</div>
+ </div>
+</div>
+
     <div class="map-shell">
       <img class="map-image" src="assets/9b17f2b7b336.webp" alt="벚꽃 마을 지도">
       <div class="map-heading">A LITTLE JOURNEY IN THE ALBUM</div>
@@ -1378,7 +1411,20 @@ $("#startButton").addEventListener("click",()=>{
   $("#startButton").classList.remove("show");
   playVideo($("#subVideo"),"assets/8828e9172bce.mp4",()=>enterMap());
 });
-function enterMap(){show("mapScreen");renderMap();startMapCats();}
+function enterMap(){
+ show("mapScreen");renderMap();startMapCats();
+ const toc=document.querySelector("#seasonToc");
+ if(toc && !toc.dataset.seen){toc.dataset.seen="1";toc.classList.add("season-toc-open");toc.setAttribute("aria-hidden","false");}
+}
+function closeSeasonToc(season){
+ const toc=document.querySelector("#seasonToc");if(!toc)return;
+ toc.classList.add("season-toc-leaving");
+ const label=toc.querySelector(".season-toc-transition");
+ label.textContent=season+"의 페이지를 넘깁니다…";
+ window.setTimeout(()=>{toc.classList.remove("season-toc-open","season-toc-leaving");toc.setAttribute("aria-hidden","true");},650);
+}
+document.querySelectorAll("#seasonToc [data-season]").forEach(btn=>btn.addEventListener("click",()=>closeSeasonToc(btn.dataset.season)));
+
 function renderMap(){
   $("#pins").innerHTML="";
   LOCATIONS.forEach(loc=>{
