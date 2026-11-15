@@ -454,6 +454,26 @@ button{font:inherit;cursor:pointer}
 #storyOverlay .school-diary-reader .story-copy{max-height:55svh;min-height:150px;overflow-y:auto;padding:20px 22px;line-height:2.1;background:repeating-linear-gradient(to bottom,#fcfaf5 0,#fcfaf5 32px,#dfe5e9 33px);border:1px solid #c7ced4;color:#354050;white-space:pre-line}
 #storyOverlay .school-diary-reader .action{background:#f5f3ed;color:#354458;border:1px solid #9ba6b5}
 @media(max-width:600px){.school-diary-book{grid-template-columns:1fr;max-height:70svh;overflow-y:auto}.school-diary-page:first-child{display:none}.school-diary-page{padding:24px 18px}.school-diary-stage{min-height:360px!important}.school-diary-cover{height:350px}#storyOverlay .story-modal.school-diary-reader{padding:18px 15px}#storyOverlay .school-diary-reader .story-copy{padding:15px 12px}}
+
+/* 익명 방명록 — 지도 및 작품 흐름과 독립된 오버레이 */
+.guestbook-map-button{position:absolute;right:3%;top:13%;z-index:5;border:1px solid #b58b73;border-radius:18px;background:#fff2dbe8;color:#765347;padding:7px 10px;font-size:clamp(10px,1.8vw,13px);box-shadow:0 3px 12px #4d321c44}
+#guestbookOverlay{z-index:35}
+.guestbook-paper{width:min(560px,95vw);max-height:88svh;overflow-y:auto;border-radius:4px;background:linear-gradient(155deg,#fff8e9,#f3e2cd);border:1px solid #bc9978;padding:26px clamp(18px,5vw,34px);box-shadow:0 18px 55px #0008;position:relative}
+.guestbook-paper:before{content:"";position:absolute;inset:8px;border:1px solid #d9baa0;pointer-events:none}
+.guestbook-kicker{text-align:center;color:#a27c68;font-size:11px;letter-spacing:.22em}
+.guestbook-paper h2{text-align:center;font-size:23px;color:#795548;margin:10px 0 7px}
+.guestbook-intro{text-align:center;font-size:13px;color:#94776a;margin:0 0 19px;line-height:1.8}
+.guestbook-paper textarea{display:block;width:100%;min-height:95px;resize:vertical;background:#fffcf3;border:1px solid #d6bba1;border-radius:3px;padding:13px;font:14px/1.8 "Gowun Batang",serif;color:#604638}
+.guestbook-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0 17px;font-size:12px;color:#907264}
+.guestbook-controls button,.guestbook-close{border:1px solid #bda18a;background:#f7e8d9;color:#765243;padding:8px 14px;border-radius:3px}
+.guestbook-controls button:disabled{opacity:.5;cursor:wait}
+.guestbook-status{min-height:22px;font-size:12px;color:#875d55;line-height:1.6}
+.guestbook-notes{border-top:1px solid #dbc3ab;margin-top:8px;padding-top:14px;display:grid;gap:10px}
+.guestbook-note{padding:13px 15px;background:#fffcf5c9;border:1px solid #e3d1be;box-shadow:0 2px 6px #6c4d3010;overflow-wrap:anywhere;white-space:pre-wrap}
+.guestbook-note strong{display:block;font-size:12px;color:#a57a78;margin-bottom:6px;font-weight:normal}
+.guestbook-note p{margin:0;font-size:14px;line-height:1.75;color:#5d483e}
+.guestbook-note time{display:block;text-align:right;margin-top:8px;color:#a68c7b;font-size:11px}
+.guestbook-close{display:block;margin:18px auto 0}
 </style>
 <style>
 
@@ -1293,10 +1313,21 @@ button{font:inherit;cursor:pointer}
       <div id="mapSeasonWind" class="map-season-wind" aria-hidden="true"></div>
       <div id="mapSeasonFade" class="map-season-fade" aria-hidden="true"></div>
       <div class="map-heading">A LITTLE JOURNEY IN THE ALBUM</div><button id="seasonMapPointer" class="season-map-pointer" type="button" aria-label="계절 선택 목차 열기"><span class="season-pointer-icon" aria-hidden="true">☞</span><span class="season-pointer-label">계절 선택</span></button>
-      <div id="pins"></div><div id="mapCats" aria-hidden="true"></div>
+      <div id="pins"></div><div id="mapCats" aria-hidden="true"></div><button id="openGuestbook" class="guestbook-map-button" type="button">✿ 우리의 계절에 남긴 말</button>
       <div id="progress">읽은 이야기 0 / 15</div>
       <button class="inventory-toggle" id="openInventory" aria-label="수집한 아이템 보관함 열기">🗝 <span id="inventoryCount">0 / 15</span></button>
       <div class="map-vignette"></div>
+    </div>
+    <div id="guestbookOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="우리의 계절에 남긴 말">
+      <article class="guestbook-paper">
+        <div class="guestbook-kicker">LETTERS THROUGH THE SEASONS</div><h2>우리의 계절에 남긴 말</h2>
+        <p class="guestbook-intro">이 계절을 지나간 당신의 마음을 한 장 남겨 주세요. 🌸<br>모든 글은 이름 없이 공개됩니다.</p>
+        <form id="guestbookForm"><textarea id="guestbookMessage" maxlength="300" required placeholder="이야기를 읽고 남기고 싶은 말을 적어 주세요."></textarea>
+        <div class="guestbook-controls"><span id="guestbookCount">0 / 300</span><button id="guestbookSubmit" type="submit">✿ 꽃잎 남기기</button></div></form>
+        <p id="guestbookStatus" class="guestbook-status" role="status" aria-live="polite"></p>
+        <div id="guestbookNotes" class="guestbook-notes" aria-live="polite"></div>
+        <button id="closeGuestbook" class="guestbook-close" type="button">지도로 돌아가기</button>
+      </article>
     </div>
     <div id="inventoryOverlay" class="overlay">
       <article class="paper-modal collection-modal" role="dialog" aria-modal="true" aria-label="추억 보관함">
@@ -2044,6 +2075,57 @@ $("#closeAlbum").onclick=()=>{
    title.style.display='none';
    layer.replaceChildren();
  },true);
+})();
+</script>
+
+<script>
+/* 공개 익명 방명록: DB 조회는 공개 읽기 권한, 작성은 서버 Edge Function만 사용 */
+(()=>{
+ const BASE="https://bhumhdsltsvelyebxvbw.supabase.co";
+ const KEY="sb_publishable_tawmqV3eF5DOc_Jpa1BwOQ_WBx_F4Ry";
+ const overlay=document.getElementById("guestbookOverlay");
+ const message=document.getElementById("guestbookMessage");
+ const status=document.getElementById("guestbookStatus");
+ const notes=document.getElementById("guestbookNotes");
+ const submit=document.getElementById("guestbookSubmit");
+ const count=document.getElementById("guestbookCount");
+ let loading=false;
+ const setStatus=(s)=>{status.textContent=s;};
+ const requestHeaders={apikey:KEY};
+ async function loadNotes(){
+   notes.textContent="남겨진 마음을 불러오는 중이에요…";
+   try{
+     const response=await fetch(BASE+"/rest/v1/guestbook?select=id,message,created_at&order=created_at.desc&limit=100",{headers:requestHeaders,cache:"no-store"});
+     if(!response.ok)throw new Error("조회 오류 "+response.status);
+     const rows=await response.json();notes.replaceChildren();
+     if(!rows.length){notes.textContent="아직 남겨진 글이 없어요. 첫 꽃잎을 남겨 주세요. 🌸";return;}
+     for(const entry of rows){
+       const item=document.createElement("article");item.className="guestbook-note";
+       const name=document.createElement("strong");name.textContent="✿ 이름 없는 독자";
+       const body=document.createElement("p");body.textContent=entry.message;
+       const date=document.createElement("time");
+       const parsed=new Date(entry.created_at);
+       if(!Number.isNaN(parsed.getTime())){date.dateTime=entry.created_at;date.textContent=parsed.toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"});}
+       item.append(name,body,date);notes.append(item);
+     }
+   }catch(e){notes.textContent="글을 불러오지 못했어요. 잠시 후 다시 열어 주세요.";console.error("Guestbook read:",e);}
+ }
+ document.getElementById("openGuestbook").addEventListener("click",()=>{overlay.classList.add("show");setStatus("");loadNotes();});
+ document.getElementById("closeGuestbook").addEventListener("click",()=>overlay.classList.remove("show"));
+ message.addEventListener("input",()=>count.textContent=message.value.length+" / 300");
+ document.getElementById("guestbookForm").addEventListener("submit",async(event)=>{
+   event.preventDefault();if(loading)return;
+   const value=message.value.trim();
+   if(!value||value.length>300){setStatus("1~300자로 마음을 남겨 주세요.");return;}
+   loading=true;submit.disabled=true;setStatus("꽃잎을 남기는 중이에요…");
+   try{
+     const response=await fetch(BASE+"/functions/v1/guestbook-submit",{method:"POST",headers:{...requestHeaders,"Content-Type":"application/json"},body:JSON.stringify({message:value})});
+     const result=await response.json().catch(()=>({}));
+     if(!response.ok||result.success!==true)throw new Error(result.error||"잠시 후 다시 시도해 주세요.");
+     message.value="";count.textContent="0 / 300";setStatus("당신의 꽃잎이 이 계절에 남았어요. 🌸");await loadNotes();
+   }catch(e){setStatus(e.message||"글을 남기지 못했어요.");}
+   finally{loading=false;submit.disabled=false;}
+ });
 })();
 </script>
 </body>
