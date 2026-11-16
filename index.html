@@ -1988,7 +1988,7 @@ function openClockDial(loc){
   const sender=month==="7월"?"정우영":"최산";
   const receiver=month==="7월"?"최산":"정우영";
   const words=month==="7월"?"산아, 생일 축하해!":"생일 축하한다, 영아";
-  header.textContent=receiver+" · "+month+"의 메시지";
+  header.textContent=receiver+" · "+(month==="7월"?"7월 10일":"11월 26일")+"의 메시지";
   const row=document.createElement("div");row.className="clock-birthday-chat-row";
   const avatar=document.createElement("div");avatar.className="clock-birthday-avatar";avatar.textContent=sender==="정우영"?"우":"산";
   const bubbleWrap=document.createElement("div");bubbleWrap.className="clock-birthday-bubble-wrap";
