@@ -1310,6 +1310,19 @@ button{font:inherit;cursor:pointer}
 .garden-camera-mode .garden-camera-visual{height:auto!important;object-fit:contain!important}
 .ghibli-boat,.clock-star-watch{object-fit:contain!important}
 </style>
+<style id="clock-birthday-chat-css">
+/* 시계탑: 달력 대신 기존 종이색을 살린 생일 카카오톡 한 줄 */
+.clock-calendar-mode.clock-calendar-open #workList.clock-calendar-list{background:#f6ecda;gap:13px;padding:16px 15px 21px;width:min(93%,410px)}
+.clock-birthday-chat{border:1px solid #dcc6a7;border-radius:7px;background:linear-gradient(155deg,#e8dfce,#eee4d2);overflow:hidden;box-shadow:0 3px 10px #5d49301a}
+.clock-birthday-chat-header{text-align:center;border-bottom:1px solid #d6c5ac;padding:10px 8px;color:#7d6957;font-size:12px;letter-spacing:.04em;background:#f9f0e0a8}
+.clock-birthday-chat-row{display:flex;align-items:flex-start;gap:10px;padding:18px 14px 24px}
+.clock-birthday-avatar{flex:none;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#e9cfa8;color:#79553c;border:1px solid #caa77c;font-size:13px}
+.clock-birthday-bubble-wrap{min-width:0;flex:1}
+.clock-birthday-bubble-wrap strong{display:block;font-size:12px;font-weight:400;color:#69594c;margin:0 0 6px}
+.clock-birthday-bubble{display:inline-block;max-width:100%;padding:12px 14px;background:#fff9ed;color:#624b3a;border-radius:3px 12px 12px 12px;border:1px solid #e4d4bc;box-shadow:0 2px 5px #5b402012;font-size:15px;line-height:1.7;word-break:keep-all}
+.clock-birthday-story{border-color:#d4bda1;background:#fffaf0;color:#74523c}
+.clock-birthday-story small{color:#a1836d}
+</style>
 </head>
 <style>
 /* 장소 화면의 바깥 테두리 제거 */
@@ -1968,15 +1981,28 @@ function openClockDial(loc){
  const stories=STORIES.filter(st=>st.location==="clock");
  function reveal(month,story,star){
   stage.querySelectorAll(".clock-memory-star").forEach(b=>b.classList.toggle("selected",b===star));
-  list.innerHTML="";
-  const title=document.createElement("div");title.className="clock-calendar-month";title.textContent=month;list.append(title);
-  const grid=document.createElement("div");grid.className="clock-calendar-grid";grid.setAttribute("aria-label",month+" 날짜 없는 달력");
-  for(let i=0;i<35;i++){const cell=document.createElement("div");cell.className="clock-calendar-cell";grid.append(cell);}list.append(grid);
-  if(story){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";const label=document.createElement("small");label.textContent="기억의 조각 · "+month;b.append(label);const name=document.createElement("strong");name.textContent=story.title;b.append(name);b.onclick=()=>openStory(story);list.append(b);}
-  if(stories[2]){const b=document.createElement("button");b.type="button";b.className="clock-calendar-story";const label=document.createElement("small");label.textContent="시계탑의 또 다른 이야기";b.append(label);const name=document.createElement("strong");name.textContent=stories[2].title;b.append(name);b.onclick=()=>openStory(stories[2]);list.append(b);}
-  const note=document.createElement("div");note.className="clock-calendar-note";note.textContent="날짜 없이 남겨 둔 우리의 달력";list.append(note);
-  modal.classList.remove("clock-calendar-open");void list.offsetWidth;modal.classList.add("clock-calendar-open");
-  stage.querySelector(".clock-instruction").textContent=month+"의 기억이 펼쳐졌어요. 다른 별도 눌러 보세요.";
+  list.replaceChildren();
+  const chat=document.createElement("section");chat.className="clock-birthday-chat";
+  chat.setAttribute("aria-label",month+" 생일 축하 대화");
+  const header=document.createElement("div");header.className="clock-birthday-chat-header";
+  const sender=month==="7월"?"정우영":"최산";
+  const receiver=month==="7월"?"최산":"정우영";
+  const words=month==="7월"?"산아, 생일 축하해!":"생일 축하한다, 영아";
+  header.textContent=receiver+" · "+month+"의 메시지";
+  const row=document.createElement("div");row.className="clock-birthday-chat-row";
+  const avatar=document.createElement("div");avatar.className="clock-birthday-avatar";avatar.textContent=sender==="정우영"?"우":"산";
+  const bubbleWrap=document.createElement("div");bubbleWrap.className="clock-birthday-bubble-wrap";
+  const name=document.createElement("strong");name.textContent=sender;
+  const bubble=document.createElement("div");bubble.className="clock-birthday-bubble";bubble.textContent=words;
+  bubbleWrap.append(name,bubble);row.append(avatar,bubbleWrap);chat.append(header,row);list.append(chat);
+  if(story){
+   const b=document.createElement("button");b.type="button";b.className="clock-calendar-story clock-birthday-story";
+   const label=document.createElement("small");label.textContent="기억의 조각 · "+month;b.append(label);
+   const title=document.createElement("strong");title.textContent=story.title;b.append(title);
+   b.onclick=()=>openStory(story);list.append(b);
+  }
+  modal.classList.remove("clock-calendar-open");void list.offsetWidth;modal.classList.add("clock-calendar-open","clock-chat-open");
+  stage.querySelector(".clock-instruction").textContent=month+"의 메시지가 도착했어요. 다른 별도 눌러 보세요.";
  }
  stage.querySelector(".clock-memory-july").onclick=e=>reveal("7월",stories[1],e.currentTarget);
  stage.querySelector(".clock-memory-november").onclick=e=>reveal("11월",stories[0],e.currentTarget);
