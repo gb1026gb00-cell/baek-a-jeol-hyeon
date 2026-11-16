@@ -1281,7 +1281,70 @@ button{font:inherit;cursor:pointer}
 #mapScreen .map-season-fade.season-fade-active{animation:mapSeasonDissolve 1.6s ease-in-out both}
 @keyframes mapSeasonDissolve{0%,100%{opacity:0}40%{opacity:.68}60%{opacity:.68}}
 @media(prefers-reduced-motion:reduce){#mapScreen .map-night-glow{transition:none}#mapScreen .map-season-fade{animation:none!important}#mapScreen .map-wind-piece{display:none}}
-</style></head>
+</style>
+<style id="practice-story-layout">
+ min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 2;
+}
+
+#storyOverlay .story-modal .modal-actions {
+  flex-shrink: 0;
+  margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+  #storyOverlay .paper-modal.story-modal {
+    padding: 20px 14px !important;
+    height: 90svh;
+    max-height: 90svh !important;
+  }
+}
+</style>
+<style id="clean-object-art">
+#locationOverlay .location-modal{border:none!important;box-shadow:none!important}
+#locationOverlay .location-modal::before,#locationOverlay .location-modal::after{display:none!important}
+.cafe-cake-trigger .cafe-cake-photo{aspect-ratio:auto!important;height:auto!important;object-fit:contain!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.garden-camera-mode .garden-camera-visual{height:auto!important;object-fit:contain!important}
+.ghibli-boat,.clock-star-watch{object-fit:contain!important}
+</style>
+</head>
+<style>
+/* 장소 화면의 바깥 테두리 제거 */
+#locationOverlay .location-modal {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 안쪽 금색 선과 아래쪽 삼각형 제거 */
+#locationOverlay .location-modal::before,
+#locationOverlay .location-modal::after {
+  display: none !important;
+}
+</style>
+<style id="practice-pc-map">
+@media (min-width: 700px) {
+  #mapScreen {
+    padding: 8px !important;
+  }
+
+  #mapScreen .map-shell {
+    width: min(96vw, 141svh) !important;
+    height: auto !important;
+    max-width: none !important;
+    aspect-ratio: 3 / 2 !important;
+  }
+
+  #mapScreen .map-image {
+    content: url("assets/map-pc.png.png");
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;
+  }
+}
+</style>
 <body>
 <div id="app">
   <section id="introScreen" class="screen video-screen active">
@@ -1748,7 +1811,7 @@ function openBridgeBoat(loc){
  const stage=document.createElement("div");stage.className="bridge-boat-stage";
  stage.innerHTML=`<div class="bridge-boat-water" aria-hidden="true"><span class="fx-ripple"></span><span class="fx-ripple"></span><span class="fx-ripple"></span></div>
  <button class="bridge-boat-trigger" type="button" aria-label="물 위의 종이 돛단배 펼치기">
- <img class="ghibli-object ghibli-boat" src="bridge_boat.png" alt="종이배"></button><p class="bridge-boat-hint">물 위에 띄운 종이배를 펼쳐 보세요</p>`;
+ <img class="ghibli-object ghibli-boat" src="assets/inline-art-01.png" alt="종이배"></button><p class="bridge-boat-hint">물 위에 띄운 종이배를 펼쳐 보세요</p>`;
  modal.insertBefore(stage,list);
  const oldDrips=modal.querySelector(".bridge-drip-layer");if(oldDrips)oldDrips.remove();
  const dripLayer=document.createElement("div");dripLayer.className="bridge-drip-layer";dripLayer.setAttribute("aria-hidden","true");
@@ -1864,7 +1927,7 @@ function openCafeCake(loc){
  list.className="work-list cafe-receipt-list";list.innerHTML="";list.style.display="";
  $("#locationTitle").textContent=loc.name;
  const stage=document.createElement("div");stage.className="cafe-cake-stage";
- stage.innerHTML=`<button class="cafe-cake-trigger" type="button" aria-label="딸기 생크림 케이크를 눌러 영수증 꺼내기"><img class="cafe-cake-photo ghibli-object" alt="딸기 조각케이크" src="cafe_cake.png"></button><p class="cafe-cake-hint">🍓 딸기 케이크를 누르면 영수증이 나옵니다</p>`;
+ stage.innerHTML=`<button class="cafe-cake-trigger" type="button" aria-label="딸기 생크림 케이크를 눌러 영수증 꺼내기"><img class="cafe-cake-photo ghibli-object" alt="딸기 조각케이크" src="assets/inline-art-02.png"></button><p class="cafe-cake-hint">🍓 딸기 케이크를 누르면 영수증이 나옵니다</p>`;
  modal.insertBefore(stage,list);
  const heading=document.createElement("div");heading.className="cafe-receipt-heading";
  heading.innerHTML="작은 카페<small>STRAWBERRY CAKE & STORIES</small>";list.append(heading);
@@ -1897,7 +1960,7 @@ function openClockDial(loc){
  list.className="work-list clock-calendar-list";list.innerHTML="";list.style.display="";
  const stage=document.createElement("div");stage.className="clock-dial-stage";
  stage.innerHTML=`<div class="clock-star-scene">
- <img class="clock-star-watch" src="clock_watch.png" alt="별이 담긴 금빛 회중시계">
+ <img class="clock-star-watch" src="assets/inline-art-03.png" alt="별이 담긴 금빛 회중시계">
  <button type="button" class="clock-memory-star clock-memory-july" aria-label="7월의 별을 모아 기억 열기"><span aria-hidden="true">✦</span><small>7월의 별</small></button>
  <button type="button" class="clock-memory-star clock-memory-november" aria-label="11월의 별을 모아 기억 열기"><span aria-hidden="true">✦</span><small>11월의 별</small></button>
  </div><p class="clock-instruction">반짝이는 별을 눌러 그날의 기억을 모아 보세요.</p>`;
@@ -1954,7 +2017,7 @@ function openLocation(loc){
  modal.querySelector(".fx-scene")?.remove();modal.querySelector(".garden-camera-stage")?.remove();
  modal.querySelector(".shop-music-player")?.remove();list.className="work-list";list.innerHTML="";list.style.display="";
  const scene=document.createElement("div");scene.className="garden-camera-stage";
- scene.innerHTML=`<div class="garden-camera-body"><img class="garden-camera-visual" src="garden_polaroid.png" alt="빈티지 폴라로이드 카메라"><button class="garden-camera-shutter" type="button" aria-label="보라색 셔터를 눌러 사진 인화하기"></button><div class="garden-camera-flash"></div></div><div class="garden-camera-hint">✿ 보라색 셔터를 눌러 추억을 인화해 주세요 ✿</div>`;
+ scene.innerHTML=`<div class="garden-camera-body"><img class="garden-camera-visual" src="assets/inline-art-04.png" alt="빈티지 폴라로이드 카메라"><button class="garden-camera-shutter" type="button" aria-label="보라색 셔터를 눌러 사진 인화하기"></button><div class="garden-camera-flash"></div></div><div class="garden-camera-hint">✿ 보라색 셔터를 눌러 추억을 인화해 주세요 ✿</div>`;
  modal.insertBefore(scene,list);
  const works=STORIES.filter(st=>st.location===loc.id);
  works.forEach((st,i)=>{
@@ -2127,6 +2190,82 @@ $("#closeAlbum").onclick=()=>{
    finally{loading=false;submit.disabled=false;}
  });
 })();
+</script>
+
+<style>
+#campusView{position:fixed;inset:0;z-index:12000;background:radial-gradient(ellipse,#765c43,#241b15);display:none;align-items:center;justify-content:center;flex-direction:column;padding:12px}
+#campusView.on{display:flex}#campusStage{position:relative;width:min(96vw,166svh);aspect-ratio:16/9}#campusArt{display:block;width:100%;height:100%;object-fit:contain}
+.campusArrow{position:absolute;top:43%;width:7%;height:14%;border:0;background:transparent;border-radius:18px}.campusArrow:focus-visible{outline:3px solid #fff0c0}.campusArrow:disabled{opacity:.2;background:#20171088;cursor:default}#campusPrev{left:3.5%}#campusNext{right:3.5%}
+.campusPin{position:absolute;transform:translate(-50%,-100%);border:2px solid #fff2d6;background:#a84f45;color:white;border-radius:50% 50% 50% 5px;width:36px;height:36px;box-shadow:0 3px 8px #0007;font-size:17px}.campusPin span{position:absolute;top:39px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:12px;background:#fff2dc;color:#60452f;padding:3px 6px;border-radius:3px}
+#campusToolbar{display:flex;align-items:center;gap:18px;color:#fff3db}#campusToolbar button,#campusReader button{padding:10px 18px;background:#fff3dd;color:#60452f;border:1px solid #b58b4d;border-radius:5px}
+#campusReader{position:absolute;inset:0;background:#160f0bd9;display:none;align-items:center;justify-content:center;padding:18px}#campusReader.on{display:flex}#campusReader article{background:#faf3e5;width:min(540px,94vw);height:84svh;padding:28px;display:flex;flex-direction:column;border:2px solid #b58b4d;border-radius:8px}#campusText{white-space:pre-wrap;overflow:auto;flex:1;line-height:2;font-size:16px}#campusReader h2{margin-top:0}
+@media(max-width:600px){.campusPin{width:29px;height:29px;font-size:14px}.campusPin span{font-size:10px;top:31px}#campusToolbar{font-size:13px}#campusStage{width:100%}}
+</style>
+<section id="campusView" role="dialog" aria-label="학교 지도" aria-modal="true">
+<div id="campusStage"><img id="campusArt" alt=""><div id="campusPins"></div><button id="campusPrev" class="campusArrow" aria-label="이전 학교"></button><button id="campusNext" class="campusArrow" aria-label="다음 학교"></button></div>
+<div id="campusToolbar"><button id="campusExit">메인 지도로</button><strong id="campusName"></strong><span>핀을 눌러 이야기를 읽어 주세요</span></div>
+<div id="campusReader"><article><h2 id="campusStoryTitle"></h2><div id="campusText"></div><button id="campusBack">학교 지도로 돌아가기</button></article></div></section>
+<script>
+(()=>{
+const images=["assets/inline-art-05.png", "assets/inline-art-06.png", "assets/inline-art-07.png"];
+// 핀 좌표와 글은 이 목록에서 수정합니다. x/y는 그림 전체의 백분율입니다.
+const schools=[
+{name:'우성초',pins:[{name:'운동장',x:49,y:58,text:'우성초 이야기\\n\\n여기에 우성초 이야기를 넣어 주세요.'}]},
+{name:'우성고',pins:[{name:'본관',x:53,y:34,text:'여기에 우성고 본관 이야기를 넣어 주세요.'},{name:'운동장',x:43,y:58,text:'여기에 우성고 운동장 이야기를 넣어 주세요.'},{name:'교문',x:50,y:76,text:'여기에 우성고 교문 이야기를 넣어 주세요.'}]},
+{name:'우성대',pins:[{name:'본관',x:53,y:32,text:'여기에 우성대 본관 이야기를 넣어 주세요.'},{name:'분수대',x:53,y:47,text:'여기에 우성대 분수대 이야기를 넣어 주세요.'}]}];
+let selected=1,previousFocus;
+const view=document.getElementById('campusView'),reader=document.getElementById('campusReader');
+function render(){const s=schools[selected];document.getElementById('campusArt').src=images[selected];document.getElementById('campusArt').alt=s.name+' 지도';document.getElementById('campusName').textContent=s.name;document.getElementById('campusPrev').disabled=selected===0;document.getElementById('campusNext').disabled=selected===2;const pins=document.getElementById('campusPins');pins.replaceChildren();s.pins.forEach((p,i)=>{const b=document.createElement('button');b.className='campusPin';b.style.left=p.x+'%';b.style.top=p.y+'%';b.textContent=i+1;b.setAttribute('aria-label',s.name+' '+p.name+' 이야기');const label=document.createElement('span');label.textContent=p.name;b.append(label);b.onclick=()=>{document.getElementById('campusStoryTitle').textContent=s.name+' · '+p.name;document.getElementById('campusText').textContent=p.text;reader.classList.add('on');document.getElementById('campusBack').focus()};pins.append(b)})}
+function move(d){selected=Math.max(0,Math.min(2,selected+d));render()}
+function close(){view.classList.remove('on');reader.classList.remove('on');previousFocus?.focus()}
+document.getElementById('campusPrev').onclick=()=>move(-1);document.getElementById('campusNext').onclick=()=>move(1);document.getElementById('campusExit').onclick=close;document.getElementById('campusBack').onclick=()=>{reader.classList.remove('on');document.querySelector('.campusPin')?.focus()};
+const original=openLocation;openLocation=function(loc){if(loc.id!=='school')return original(loc);previousFocus=document.activeElement;selected=1;reader.classList.remove('on');document.getElementById('locationOverlay').classList.remove('show');render();view.classList.add('on');document.getElementById('campusExit').focus()};
+document.addEventListener('keydown',e=>{if(!view.classList.contains('on'))return;if(e.key==='Escape'){reader.classList.contains('on')?reader.classList.remove('on'):close();e.preventDefault()}else if(!reader.classList.contains('on')&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){move(e.key==='ArrowLeft'?-1:1);e.preventDefault()}});
+})();
+</script>
+
+<script>
+(()=>{
+const ART={"black": {"walk": {"url": "assets/inline-art-08.png", "ratio": "95.2 / 70"}, "stretch": {"url": "assets/inline-art-09.png", "ratio": "95.2 / 72"}, "sit": {"url": "assets/inline-art-10.png", "ratio": "95.2 / 71"}}, "yellow": {"walk": {"url": "assets/inline-art-11.png", "ratio": "95.2 / 70"}, "stretch": {"url": "assets/inline-art-12.png", "ratio": "95.2 / 70"}, "sit": {"url": "assets/inline-art-13.png", "ratio": "95.2 / 70"}}};
+// Road centre lines, expressed as percentages of each complete map image.
+const roads={
+pc:[[32,38],[31,44],[29,51],[32,58],[40,63],[49,65],[58,62],[65,57],[67,50],[70,43],[77,37],[83,33],[62,36],[54,30],[45,27],[39,29],[20,62],[27,67],[39,74],[51,76],[59,70],[70,65],[82,60]],
+mobile:[[31,39],[33,43],[29,47],[23,51],[32,55],[43,57],[55,56],[63,53],[65,49],[69,46],[77,43],[83,41],[59,43],[49,41],[41,39],[35,38],[15,55],[24,58],[38,61],[49,62],[58,60],[71,57],[83,55]]};
+const edges=[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[9,12],[12,13],[13,14],[14,15],[15,0],[3,16],[16,17],[17,18],[18,19],[19,20],[20,6],[20,21],[21,22],[22,8]];
+let cats=[],running=false,last=0,layout='',visitToken=0;
+const shell=document.querySelector('#mapScreen .map-shell'),layer=document.getElementById('mapCats');
+const style=document.createElement('style');style.textContent=`#mapCats .road-cat{position:absolute;width:clamp(21px,3.3vw,35px);height:auto;aspect-ratio:6/5;transform:translate(-50%,-88%);pointer-events:none;will-change:left,top}#mapCats .road-cat-sprite{width:100%;height:100%;background-repeat:no-repeat;background-size:500% 100%;transform-origin:center;filter:drop-shadow(0 1px 1px #241b1555)}@media(max-width:699px){#mapCats .road-cat{width:clamp(19px,6vw,27px)}}`;document.head.append(style);
+const choose=a=>a[Math.floor(Math.random()*a.length)];
+function getLayout(){const ratio=shell.clientWidth/shell.clientHeight;return ratio>1?'pc':'mobile'}
+function graph(){return roads[layout]}
+function neighbors(n){return edges.flatMap(([a,b])=>a===n?[b]:b===n?[a]:[])}
+function route(start,end){const dist=graph().map(()=>Infinity),prev=[];dist[start]=0;const todo=new Set(graph().map((_,i)=>i));while(todo.size){const u=[...todo].reduce((a,b)=>dist[a]<dist[b]?a:b);todo.delete(u);if(u===end)break;for(const v of neighbors(u)){const d=dist[u]+Math.hypot(graph()[u][0]-graph()[v][0],graph()[u][1]-graph()[v][1]);if(d<dist[v]){dist[v]=d;prev[v]=u}}}const out=[];for(let u=end;u!==start;u=prev[u]){if(u===undefined)return [];out.unshift(u)}return out}
+function nearest(x,y){return graph().reduce((best,p,i)=>Math.hypot(p[0]-x,p[1]-y)<Math.hypot(graph()[best][0]-x,graph()[best][1]-y)?i:best,0)}
+function frameArt(c,action,frame){if(c.art!==action){c.art=action;c.sprite.style.backgroundImage=`url("${ART[c.color][action].url}")`;c.el.style.aspectRatio=ART[c.color][action].ratio}c.sprite.style.backgroundPosition=(frame*25)+'% 0';c.sprite.style.transform=`scaleX(${c.facing})`}
+function position(c){let a=graph()[c.node],b=c.next===null?a:graph()[c.next];c.x=a[0]+(b[0]-a[0])*c.t;c.y=a[1]+(b[1]-a[1])*c.t;c.el.style.left=c.x+'%';c.el.style.top=c.y+'%'}
+function depart(c){c.action='walk';c.clock=0;if(c.next===null){const options=neighbors(c.node).filter(n=>n!==c.previous);c.next=c.path.length?c.path.shift():choose(options.length?options:neighbors(c.node));c.t=0}c.speed=8+Math.random()*5}
+function rest(c){c.action=Math.random()<.6?'sit':'stretch';c.clock=0;c.wait=1800+Math.random()*5200}
+function init(){layout=getLayout();layer.replaceChildren();cats=['black','yellow'].map((color,i)=>{const el=document.createElement('div'),sprite=document.createElement('div');el.className='road-cat';sprite.className='road-cat-sprite';el.append(sprite);layer.append(el);const c={el,sprite,color,node:i?20:4,next:null,previous:-1,t:0,path:[],facing:1,action:'sit',clock:0,wait:800+i*1700};position(c);frameArt(c,'sit',4);return c})}
+function paused(){return document.hidden||!document.getElementById('mapScreen').classList.contains('active')||document.querySelector('#mapScreen .overlay.show,.season-toc-open,#campusView.on')}
+function tick(now){const dt=Math.max(0,Math.min(70,now-(last||now)));last=now;if(!paused()){
+layout=getLayout();const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+for(const c of cats){position(c);c.clock+=dt;
+if(reduced){position(c);frameArt(c,'sit',4);continue}
+if(c.action==='walk'){
+const a=graph()[c.node],b=graph()[c.next];const distance=Math.hypot((b[0]-a[0])*shell.clientWidth/100,(b[1]-a[1])*shell.clientHeight/100);c.t=Math.min(1,c.t+dt/1000*(shell.clientWidth*c.speed/100)/Math.max(1,distance));if(Math.abs(b[0]-a[0])>.1)c.facing=b[0]<a[0]?1:-1;position(c);frameArt(c,'walk',Math.floor(c.clock/145)%5);
+if(c.t>=1){c.previous=c.node;c.node=c.next;c.next=null;c.t=0;if(c.path.length)depart(c);else if(Math.random()<.38)rest(c);else depart(c)}
+}else if(c.action==='rise'){const f=4-Math.min(4,Math.floor(c.clock/150));frameArt(c,c.restArt,f);if(c.clock>=750)depart(c)}
+else{frameArt(c,c.action,Math.min(4,Math.floor(c.clock/160)));if(c.clock>c.wait){c.restArt=c.action;c.action='rise';c.clock=0}}
+}}
+requestAnimationFrame(tick)}
+startMapCats=function(){if(running)return;running=true;init();requestAnimationFrame(tick)};
+scheduleCatWander=function(){};
+visitLocationWithCats=function(loc){startMapCats();const token=++visitToken;layout=getLayout();const target=nearest(loc.x,loc.y);for(const c of cats){const start=c.next===null?c.node:c.next;c.path=route(start,target);if(c.next===null&&c.path.length)depart(c)}setTimeout(()=>{if(token===visitToken)openLocation(loc)},350)};
+// Expose geometry only for road-network validation.
+window.catRoadGeometry={roads,edges,route,nearest};
+})();
+
+
 </script>
 </body>
 </html>
